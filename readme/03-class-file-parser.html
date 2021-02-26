@@ -1,0 +1,2119 @@
+
+    <!doctype html>
+    <html >
+        <head>
+            <title data-react-helmet="true">Lab3 ClassFileParser - JVM实验框架文档</title>
+            <meta data-react-helmet="true" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/><meta data-react-helmet="true" charset="utf-8"/><meta data-react-helmet="true" name="google" value="notranslate"/><meta data-react-helmet="true" property="og:image" content="https://app.gitbook.com/share/space/thumbnail/-M7HTVnrQXURnsIjLi0Q.png"/><meta data-react-helmet="true" property="twitter:card" content="summary"/><meta data-react-helmet="true" property="twitter:site" content="JVM实验框架文档"/><meta data-react-helmet="true" name="description" content=""/><meta data-react-helmet="true" property="og:title" content="Lab3 ClassFileParser"/><meta data-react-helmet="true" property="og:description" content=""/>
+            <link data-react-helmet="true" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500"/><link data-react-helmet="true" rel="stylesheet" href="https://unpkg.com/emojione-assets@4.0.0/sprites/emojione-sprite-40.min.css"/><link data-react-helmet="true" rel="preconnect" href="https://www.googleapis.com"/><link data-react-helmet="true" rel="preconnect" href="https://api.amplitude.com"/><link data-react-helmet="true" rel="preconnect" href="https://gblobscdn.gitbook.com/"/><link data-react-helmet="true" rel="icon" href="https://d1j8pt39hxlh3d.cloudfront.net/emoji/emojione/5.0/png/unicode/32/1f58c.png"/><link data-react-helmet="true" rel="canonical" href="https://se1.abn-team.top/mooc-minilab/class-file-parser"/><link data-react-helmet="true" rel="stylesheet" href="https://gstatic.gitbook.com/css/6c3c9dec9383137845be0f0ea2cf1bf4.css"/>
+            <style data-react-helmet="true" type="text/css">
+        @font-face {
+            font-family: "Roboto";
+            src: local("Roboto"), local("Roboto-Regular"), url(https://gstatic.gitbook.com/fonts/fc3d4b35e4d07d4e0485cc2db0e57c77.woff) format('woff');
+            font-weight: 400;
+            font-display: fallback;
+        }
+        @font-face {
+            font-family: "Roboto";
+            src: local("Roboto Medium"), local("Roboto-Medium"), url(https://gstatic.gitbook.com/fonts/f4fa50c4003f87e7dc10459e500933c3.woff) format('woff');
+            font-weight: 500;
+            font-display: fallback;
+        }
+        @font-face {
+            font-family: "Roboto";
+            src: local("Roboto Bold"), local("Roboto-Bold"), url(https://gstatic.gitbook.com/fonts/72e37e5bf95a8dba938c78b1d7d91253.woff) format('woff');
+            font-weight: 700;
+            font-display: fallback;
+        }
+    </style><style data-react-helmet="true" type="text/css">
+        @font-face {
+            font-family: "Content-font";
+            src: local("Roboto"), local("Roboto-Regular"), url(https://gstatic.gitbook.com/fonts/fc3d4b35e4d07d4e0485cc2db0e57c77.woff) format('woff');
+            font-weight: 400;
+            font-display: fallback;
+        }
+        @font-face {
+            font-family: "Content-font";
+            src: local("Roboto Medium"), local("Roboto-Medium"), url(https://gstatic.gitbook.com/fonts/f4fa50c4003f87e7dc10459e500933c3.woff) format('woff');
+            font-weight: 500;
+            font-display: fallback;
+        }
+        @font-face {
+            font-family: "Content-font";
+            src: local("Roboto Bold"), local("Roboto-Bold"), url(https://gstatic.gitbook.com/fonts/72e37e5bf95a8dba938c78b1d7d91253.woff) format('woff');
+            font-weight: 700;
+            font-display: fallback;
+        }
+    </style>
+            <script data-react-helmet="true" type="text/javascript" defer="true" src="https://polyfill.io/v3/polyfill.min.js?flags=gated&amp;features=Intl"></script>
+            <style>#__GITBOOK__ROOT__SERVER__ { width: 100%; height: 100%; display: flex;}</style>
+            <style>#__GITBOOK__ROOT__CLIENT__ { width: 100%; min-height: 100%; height: initial; display: flex;}</style>
+            <style id="__GITBOOK__STYLE__">html, body {
+  color: #242A31;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-size: 15px;
+  background: #F5F7F9;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+  line-height: 1em;
+  font-smoothing: antialiased;
+  text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+@media screen and (min-width: 768px) {
+  html, body {
+    text-rendering: optimizeLegibility;
+  }
+}
+@media print {
+  html, body {
+    background: transparent;
+  }
+}
+*, *:before, *:after {
+  outline: none;
+  box-sizing: inherit;
+}
+@font-face {
+  font-family: "Flow-Rounded";
+  src: url("https://gstatic.gitbook.com/fonts/bfc0a96537ceb0cad9e956b9f980fe88.woff") format('woff');
+  font-display: block;
+}
+input, select, textarea {
+  font-size: 16px;
+}
+input, select, textarea, button {
+  font: inherit;
+}
+input[type="search"] {
+  -webkit-appearance: none;
+}
+.draggingElement, .draggingElement *:hover {
+  cursor: grabbing !important;
+  pointer-events: auto !important;
+}
+.draggingElement .draggingHidden {
+  display: none;
+}
+
+.reset-3c756112--body-68cac36c {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  color: #242A31;
+  width: 100%;
+  margin: 0;
+  display: flex;
+  padding: 0;
+  background: #F5F7F9;
+  min-height: 100vh;
+  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+}
+.reset-3c756112--header-07037613--header-11420428 {
+  display: -webkit-box;
+  height: 80px;
+  margin: 0;
+  display: flex;
+  padding: 0;
+  z-index: 20;
+  position: relative;
+  box-shadow: 0 3px 8px 0 rgba(116, 129, 141, 0.1);
+  border-bottom: 1px solid #d4dadf;
+  background-color: #FFFFFF;
+}
+@media print {
+  .reset-3c756112--header-07037613--header-11420428 {
+    display: none;
+  }
+}
+@media screen and (max-width: 1023px) {
+  .reset-3c756112--header-07037613--header-11420428 {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    top: 0;
+    width: 100%;
+    display: flex;
+    position: fixed;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+@media screen and (max-width: 767px) {
+  .reset-3c756112--header-07037613--header-11420428 {
+    height: 60px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+}
+.reset-3c756112--headerContainer-bb8cc0bc {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  padding: 0;
+  max-width: 1448px;
+}
+.reset-3c756112--headerLeftColumn-4eae0bae--headerLeftColumn-7efc9f26 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  width: 100%;
+  margin: 0;
+  display: flex;
+  padding: 0;
+  position: relative;
+  align-items: center;
+  justify-content: space-between;
+  -webkit-box-pack: justify;
+  -webkit-box-align: center;
+}
+@media screen and (min-width: 1024px) {
+  .reset-3c756112--headerLeftColumn-4eae0bae--headerLeftColumn-7efc9f26 {
+    max-width: 298px;
+    justify-content: center;
+    -webkit-box-pack: center;
+  }
+  .reset-3c756112--headerLeftColumn-4eae0bae--headerLeftColumn-7efc9f26:after {
+    top: 50%;
+    right: 0;
+    height: 40px;
+    content: " ";
+    position: absolute;
+    transform: translateY(-50%);
+    border-left: 1px solid #E6ECF1;
+  }
+}
+.reset-3c756112--mobileButton-7a76d05f {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  flex: 0 0 auto;
+  width: 30px;
+  cursor: pointer;
+  height: 30px;
+  margin: 0;
+  display: flex;
+  outline: none;
+  padding: 0;
+  font-size: 18px;
+  align-items: center;
+  justify-content: center;
+  -webkit-box-pack: center;
+  -webkit-box-align: center;
+}
+@media screen and (min-width: 1024px) {
+  .reset-3c756112--mobileButton-7a76d05f {
+    display: none;
+  }
+}
+.icon-7f6730be--text-3f89f380--icon-1f8349b3 {
+  color: #242A31;
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+}
+.reset-3c756112--headerLogo-5c0b38e2 {
+  margin: 0;
+  display: block;
+  padding: 0px 24px;
+}
+@media screen and (min-width: 1024px) {
+  .reset-3c756112--headerLogo-5c0b38e2 {
+    width: 250px;
+    padding: 0;
+  }
+}
+.reset-3c756112--mobileLogo-dacfd15c {
+  margin: 0;
+  display: none;
+  padding: 0;
+}
+@media screen and (max-width: 767px) {
+  .reset-3c756112--mobileLogo-dacfd15c {
+    display: block;
+  }
+}
+.link-a079aa82--primary-53a25e66--logoLink-10d08504 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  color: #3884FF;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  -webkit-box-align: center;
+}
+.reset-3c756112--logoContainer-da09bede--iconBackground-2463e710--logoContainerS-2ec8ae1a {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  width: 30px;
+  height: 30px;
+  margin: 0;
+  display: flex;
+  padding: 0;
+  background: #6BB6B6;
+  align-items: center;
+  padding-top: 4px;
+  border-radius: 3px;
+  justify-content: center;
+  -webkit-box-pack: center;
+  -webkit-box-align: center;
+}
+.wrapper-c9de902e {
+  display: inline-block;
+  position: relative;
+}
+.emoji-64354ccb {
+  top: 50% !important;
+  left: 50%;
+  margin: 0 !important;
+  position: absolute !important;
+}
+.reset-3c756112--S100Left-7c8af13a--logoDisplayNameContainer-583bfe61--logoText-622a9478 {
+  flex: 1;
+  color: #242A31;
+  margin: 0;
+  display: block;
+  padding: 0;
+  padding-left: 8px;
+}
+@media screen and (max-width: 1023px) {
+  .reset-3c756112--S100Left-7c8af13a--logoDisplayNameContainer-583bfe61--logoText-622a9478 {
+    overflow: hidden;
+    max-width: 50vw;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+.reset-3c756112--S100Left-7c8af13a--logoDisplayNameContainer-583bfe61--logoText-622a9478:hover {
+  color: #6BB6B6;
+}
+.text-4505230f--DisplayH700-a03ad9b4--textContentFamily-49a318e1--spaceNameText-677c2969 {
+  font-size: 24px;
+  font-family: Content-font, Roboto, sans-serif;
+  font-weight: 500;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+}
+.reset-3c756112--desktopLogo-a594db90 {
+  margin: 0;
+  display: block;
+  padding: 0;
+}
+@media screen and (max-width: 767px) {
+  .reset-3c756112--desktopLogo-a594db90 {
+    display: none;
+  }
+}
+.reset-3c756112--logoContainer-da09bede--iconBackground-2463e710--logoContainerM-296350e4 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  width: 40px;
+  height: 40px;
+  margin: 0;
+  display: flex;
+  padding: 0;
+  background: #6BB6B6;
+  align-items: center;
+  padding-top: 4px;
+  border-radius: 3px;
+  justify-content: center;
+  -webkit-box-pack: center;
+  -webkit-box-align: center;
+}
+.reset-3c756112--headerInnerWrapper-629f79d1--headerInnerWrapper-4f99acea {
+  flex: 1 1 auto;
+  margin: 0px 88px;
+  display: block;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+  max-width: 750px;
+}
+.reset-3c756112--headerInnerWrapper-629f79d1--headerInnerWrapper-4f99acea:after {
+  background: -webkit-linear-gradient(to right, rgba(255,255,255,0) 0%, #FFFFFF 100%);
+  background: -moz-linear-gradient(to right, rgba(255,255,255,0) 0%, #FFFFFF 100%);
+  top: 0;
+  right: 0;
+  width: 32px;
+  height: 100%;
+  content: " ";
+  position: absolute;
+  background: linear-gradient(to right, rgba(255,255,255,0) 0%, #FFFFFF 100%);
+  pointer-events: none;
+}
+@media screen and (max-width: 1439px) {
+  .reset-3c756112--headerInnerWrapper-629f79d1--headerInnerWrapper-4f99acea {
+    margin: 0px 24px 0px 88px;
+  }
+}
+@media screen and (max-width: 1023px) {
+  .reset-3c756112--headerInnerWrapper-629f79d1--headerInnerWrapper-4f99acea {
+    display: none;
+  }
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisX-bf86cd6c--headerInner-c872fc48 {
+  display: -webkit-box;
+  overflow-x: auto;
+  height: 100%;
+  margin: 0;
+  display: flex;
+  opacity: 1;
+  padding: 0;
+  overflow-x: overlay;
+  overflow-y: hidden;
+  transition: flex 250ms ease,width 250ms ease,opacity 250ms ease;
+  -moz-transition: flex 250ms ease,width 250ms ease,opacity 250ms ease;
+  -webkit-transition: flex 250ms ease,width 250ms ease,opacity 250ms ease;
+  -webkit-overflow-scrolling: touch;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisX-bf86cd6c--headerInner-c872fc48::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+  display: none;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisX-bf86cd6c--headerInner-c872fc48::-webkit-scrollbar-track {
+  background: none;
+  border-width: 0;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisX-bf86cd6c--headerInner-c872fc48::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,.16);
+  transition: background 250ms ease;
+  border-radius: 2px;
+  -moz-transition: background 250ms ease;
+  -webkit-transition: background 250ms ease;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisX-bf86cd6c--headerInner-c872fc48::-webkit-scrollbar-button {
+  display: none;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisX-bf86cd6c--headerInner-c872fc48::-webkit-scrollbar-track-piece {
+  display: none;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisX-bf86cd6c--headerInner-c872fc48::-webkit-scrollbar-corner {
+  display: none;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisX-bf86cd6c--headerInner-c872fc48::-webkit-resizer {
+  display: none;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisX-bf86cd6c--headerInner-c872fc48:hover::-webkit-scrollbar {
+  display: initial;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisX-bf86cd6c--headerInner-c872fc48:hover::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,.16);
+}
+.reset-3c756112--searchInputWrapper-ea7f3052--searchInputWrapper-0442d130 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  height: 80px;
+  margin: 0;
+  display: flex;
+  padding: 0;
+  position: relative;
+  max-width: 224px;
+  align-items: center;
+  -webkit-box-align: center;
+}
+.reset-3c756112--searchInputWrapper-ea7f3052--searchInputWrapper-0442d130:before {
+  top: 50%;
+  left: 0;
+  height: 40px;
+  content: " ";
+  position: absolute;
+  transform: translateY(-50%);
+  border-left: 1px solid #E6ECF1;
+}
+@media screen and (max-width: 1023px) {
+  .reset-3c756112--searchInputWrapper-ea7f3052--searchInputWrapper-0442d130 {
+    display: none;
+  }
+}
+.reset-3c756112--inputContainer-b2cb171c {
+  margin: 0;
+  display: block;
+  padding: 0;
+  padding-left: 14px;
+  padding-right: 16px;
+}
+.inputInner-5c86b87d--medium-0bbed4bd--inputInner-4216b016--searchInputPlaceholder-936306be {
+  font: inherit;
+  color: #242A31;
+  width: 100%;
+  border: none;
+  cursor: inherit;
+  height: 38px;
+  margin: 0;
+  resize: none;
+  outline: none;
+  padding: 0px 8px;
+  background: transparent;
+  box-sizing: border-box;
+  text-align: left;
+  line-height: inherit;
+  border-radius: 3px;
+}
+.inputInner-5c86b87d--medium-0bbed4bd--inputInner-4216b016--searchInputPlaceholder-936306be::placeholder {
+  color: #9DAAB6;
+  font-size: 16px;
+  font-weight: 500;
+}
+.reset-3c756112--inputWrapper-63396dac--TextH400-3033861f--medium-4505230f--light-502263b4--input-6d442051--searchInput-3fa812d5 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  width: 100%;
+  border: none;
+  margin: 0;
+  display: flex;
+  outline: none;
+  padding: 0;
+  font-size: 16px;
+  background: #FFFFFF;
+  box-sizing: border-box;
+  font-weight: 400;
+  line-height: 1.625;
+  border-radius: 3px;
+  background-color: #FFFFFF;
+}
+.reset-3c756112--inputInnerSizer-756c9114 {
+  flex: 1;
+  margin: 0;
+  display: block;
+  padding: 0;
+}
+.reset-3c756112--inputAddOn-45de9ec1--inputAddOnPrefix-202fa60d--icon-1f8349b3 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  flex: 0 0 auto;
+  color: #242A31;
+  order: -1;
+  margin: 0;
+  display: flex;
+  padding: 0;
+  align-items: center;
+  line-height: 1.2;
+  white-space: nowrap;
+  padding-left: 8px;
+  -webkit-box-align: center;
+}
+.icon-7f6730be--text-3f89f380 {
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+}
+.reset-3c756112--bodyContent-2f98451b {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  flex: 1;
+  color: #3B454E;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  padding: 0;
+}
+.reset-3c756112--wholeContent-9fc567d4 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  width: 100%;
+  margin: 0;
+  display: flex;
+  padding: 0;
+  position: relative;
+  min-height: 100%;
+  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+}
+.reset-3c756112--wholeContentBody-554be184 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  flex: 1;
+  margin: 0;
+  display: flex;
+  padding: 0;
+  transition: margin-bottom 250ms ease;
+  align-items: stretch;
+  -moz-transition: margin-bottom 250ms ease;
+  -webkit-box-align: stretch;
+  -webkit-transition: margin-bottom 250ms ease;
+}
+@media screen and (max-width: 1023px) {
+  .reset-3c756112--wholeContentBody-554be184 {
+    padding-top: 80px;
+  }
+}
+@media screen and (max-width: 767px) {
+  .reset-3c756112--wholeContentBody-554be184 {
+    padding-top: 60px;
+  }
+}
+@keyframes keyframes-animation-2f81d449-0-1-243 {
+  0% {
+    background-color: rgba(24, 48, 85, 0);
+  }
+  100% {
+    background-color: rgba(24, 48, 85, 0.30000000000000004);
+  }
+}
+.reset-3c756112--backdrop-1322b68a--hidden-247382c3--overlay-29559ab8 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+  display: flex;
+  padding: 0;
+  z-index: 29;
+  position: absolute;
+  transition: background-color 250ms ease-out;
+  align-items: center;
+  animation-name: none;
+  pointer-events: none;
+  -moz-transition: background-color 250ms ease-out;
+  justify-content: center;
+  -webkit-box-pack: center;
+  background-color: rgba(24, 48, 85, 0);
+  -webkit-box-align: center;
+  -webkit-transition: background-color 250ms ease-out;
+  animation-duration: 0.2s;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-out;
+}
+@media screen and (min-width: 1024px) {
+  .reset-3c756112--backdrop-1322b68a--hidden-247382c3--overlay-29559ab8 {
+    z-index: 14;
+  }
+}
+.reset-3c756112--contentNavigation-dd3370a4 {
+  margin: 0;
+  display: block;
+  padding: 0;
+  z-index: 30;
+}
+@media print {
+  .reset-3c756112--contentNavigation-dd3370a4 {
+    display: none;
+  }
+}
+@media screen and (min-width: 1024px) {
+  .reset-3c756112--contentNavigation-dd3370a4 {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    flex: 0 0 auto;
+    width: calc((100% - 1448px) / 2 + 298px);
+    display: flex;
+    z-index: 15;
+    min-width: 298px;
+    background: #F5F7F9;
+    align-items: stretch;
+    border-right: 1px solid #E6ECF1;
+    padding-left: calc((100% - 1448px) / 2);
+    flex-direction: column;
+    -webkit-box-align: stretch;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+  }
+}
+.reset-3c756112--contentNavigationInner-205d49ea--contentNavigationInnerCollapsed-7b4aca00 {
+  flex: 1;
+  margin: 0;
+  display: block;
+  padding: 0;
+}
+@media screen and (max-width: 1023px) {
+  .reset-3c756112--contentNavigationInner-205d49ea--contentNavigationInnerCollapsed-7b4aca00 {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 30;
+    position: fixed;
+    max-width: 298px;
+    transform: translateX(-100%) !important;
+    box-shadow: none;
+    overflow-y: auto;
+    transition: transform 250ms ease;
+    border-right: 1px solid #E6ECF1;
+    -moz-transition: transform 250ms ease;
+    background-color: #fff;
+    -webkit-transition: transform 250ms ease;
+  }
+}
+.reset-3c756112--sidebarWrapper-84a13d8e {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  flex: auto;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  display: flex;
+  padding: 0;
+  align-items: stretch;
+  flex-direction: column;
+  -webkit-box-align: stretch;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+}
+.reset-3c756112 {
+  margin: 0;
+  display: block;
+  padding: 0;
+}
+.reset-3c756112--sidebar-84a13d8e {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  flex: auto;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  display: flex;
+  padding: 0;
+  align-items: stretch;
+  flex-direction: column;
+  -webkit-box-align: stretch;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+}
+.reset-3c756112--sidebarMain-13701e8f {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  height: 100%;
+  margin: 0;
+  display: flex;
+  padding: 0;
+  overflow-y: hidden;
+  flex-direction: column;
+  background-color: #F5F7F9;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisY-7680295e--sidebarInner-18a1e7fe {
+  overflow-y: auto;
+  flex: 1 1 auto;
+  width: 100%;
+  margin: 0;
+  display: block;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: overlay;
+  -webkit-overflow-scrolling: touch;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisY-7680295e--sidebarInner-18a1e7fe::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+  display: none;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisY-7680295e--sidebarInner-18a1e7fe::-webkit-scrollbar-track {
+  background: none;
+  border-width: 0;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisY-7680295e--sidebarInner-18a1e7fe::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,.16);
+  transition: background 250ms ease;
+  border-radius: 2px;
+  -moz-transition: background 250ms ease;
+  -webkit-transition: background 250ms ease;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisY-7680295e--sidebarInner-18a1e7fe::-webkit-scrollbar-button {
+  display: none;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisY-7680295e--sidebarInner-18a1e7fe::-webkit-scrollbar-track-piece {
+  display: none;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisY-7680295e--sidebarInner-18a1e7fe::-webkit-scrollbar-corner {
+  display: none;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisY-7680295e--sidebarInner-18a1e7fe::-webkit-resizer {
+  display: none;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisY-7680295e--sidebarInner-18a1e7fe:hover::-webkit-scrollbar {
+  display: initial;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisY-7680295e--sidebarInner-18a1e7fe:hover::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,.16);
+}
+.reset-3c756112--mobileHeader-4e2d4892 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  color: #74818D;
+  height: 59px;
+  margin: 0;
+  display: flex;
+  padding: 0;
+  box-shadow: 0 1px 1px 0 rgba(116, 129, 141, 0.1);
+  align-items: stretch;
+  border-bottom: 1px solid #d4dadf;
+  background-color: #FFFFFF;
+  -webkit-box-align: stretch;
+}
+@media screen and (min-width: 768px) {
+  .reset-3c756112--mobileHeader-4e2d4892 {
+    display: none;
+  }
+}
+.reset-3c756112--mobileHeaderClose-47b8fa64 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  cursor: pointer;
+  margin: 0;
+  display: flex;
+  padding: 8px 16px;
+  font-size: 24px;
+  align-items: center;
+  -webkit-box-align: center;
+}
+.reset-3c756112--pagesTree-4b07cd56 {
+  margin: 0;
+  display: block;
+  padding: 0;
+  font-size: 15px;
+  margin-top: 32px;
+  padding-left: 16px;
+}
+@media screen and (min-width: 768px) {
+  .reset-3c756112--pagesTree-4b07cd56 {
+    padding-left: 24px;
+  }
+}
+.reset-3c756112--pageItem-01e3f344 {
+  margin: 0;
+  display: block;
+  padding: 0;
+  position: relative;
+  border-left: 1px solid transparent;
+}
+.reset-3c756112--pageComponent-7cc5301a {
+  margin: 0;
+  display: block;
+  padding: 0;
+  margin-left: -1px;
+}
+.navButton-94f2579c--navButtonClickable-161b88ca {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  color: inherit;
+  border: 1px solid transparent;
+  cursor: pointer;
+  display: flex;
+  padding: 7px 24px 7px 16px;
+  position: relative;
+  align-items: center;
+  border-right: 0;
+  text-decoration: none;
+  -webkit-box-align: center;
+}
+.navButton-94f2579c--navButtonClickable-161b88ca:hover {
+  background-color: #E6ECF1;
+}
+.text-4505230f--UIH300-2063425d--textContentFamily-49a318e1--navButtonLabel-14a4968f {
+  flex: 1;
+  font-size: 14px;
+  word-break: break-word;
+  font-family: Content-font, Roboto, sans-serif;
+  font-weight: 500;
+  line-height: 1.5;
+}
+.reset-3c756112--pageItemWithChildren-56f27afc {
+  margin: 0;
+  display: block;
+  padding: 0;
+  position: relative;
+}
+.reset-3c756112--pageItemWithChildren-56f27afc--S300Bottom-9b4658d2 {
+  margin: 0;
+  display: block;
+  padding: 0;
+  position: relative;
+  margin-bottom: 24px;
+}
+.reset-3c756112--navButton-94f2579c--pageGroup-2c5d8183 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  color: #9DAAB6;
+  border: 1px solid transparent;
+  margin: 0;
+  display: flex;
+  padding: 7px 24px 7px 16px;
+  position: relative;
+  align-items: center;
+  border-right: 0;
+  text-decoration: none;
+  -webkit-box-align: center;
+}
+.text-4505230f--InfoH200-3a8a7a86--textContentFamily-49a318e1 {
+  font-size: 12px;
+  font-family: Content-font, Roboto, sans-serif;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+.reset-3c756112--pageChildren-56f27afc--pageGroupChildren-2d50aefa {
+  margin: 0;
+  display: block;
+  padding: 0;
+  position: relative;
+  margin-left: 0;
+}
+.navButton-94f2579c--navButtonClickable-161b88ca--navButtonOpened-6a88552e {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  color: inherit;
+  border: 1px solid transparent;
+  cursor: pointer;
+  display: flex;
+  padding: 7px 24px 7px 16px;
+  position: relative;
+  align-items: center;
+  border-color: #E6ECF1 !important;
+  border-right: 0;
+  text-decoration: none;
+  background-color: #FFFFFF;
+  -webkit-box-align: center;
+}
+.navButton-94f2579c--navButtonClickable-161b88ca--navButtonOpened-6a88552e:hover {
+  border-color: #E6ECF1;
+  background-color: #FFFFFF;
+}
+.reset-3c756112--navButtonIcon-433c72ce--navButtonIconClickable-11a89312 {
+  color: #9DAAB6;
+  cursor: pointer;
+  margin: -8px;
+  display: block;
+  padding: 8px;
+  position: relative;
+  font-size: 18px;
+  line-height: 1;
+  margin-left: 0;
+}
+.reset-3c756112--navButtonIcon-433c72ce--navButtonIconClickable-11a89312:hover {
+  color: #5C6975;
+}
+.reset-3c756112--footer-68e6f18c {
+  margin: 0;
+  display: block;
+  padding: 0;
+  position: relative;
+}
+.reset-3c756112--footer-68e6f18c:before {
+  background: -webkit-linear-gradient(to bottom, rgba(255,255,255,0) 0%, #F5F7F9 100%);
+  background: -moz-linear-gradient(to bottom, rgba(255,255,255,0) 0%, #F5F7F9 100%);
+  top: -24px;
+  width: 100%;
+  height: 24px;
+  content: "";
+  display: block;
+  position: absolute;
+  background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, #F5F7F9 100%);
+}
+.reset-3c756112--trademark-a8da4b94 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  color: #9DAAB6;
+  margin: 16px;
+  display: flex;
+  padding: 0;
+  align-items: center;
+  margin-left: 32px;
+  padding-top: 8px;
+  padding-left: 16px;
+  border-radius: 3px;
+  padding-right: 16px;
+  padding-bottom: 8px;
+  text-decoration: none;
+  background-color: #E6ECF1;
+  -webkit-box-align: center;
+}
+.reset-3c756112--trademark-a8da4b94:hover {
+  color: #3884FF;
+}
+.reset-3c756112--trademarkLogo-0d2d53bc {
+  margin: 0;
+  display: block;
+  padding: 0;
+  font-size: 40px;
+}
+.reset-3c756112--trademarkContent-04a01aea {
+  flex: 1;
+  margin: 0;
+  display: block;
+  padding: 0;
+  padding-left: 16px;
+}
+.text-4505230f--TextH200-a3425406--textUIFamily-5ebd8e40 {
+  font-size: 12px;
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  line-height: 1.625;
+}
+.reset-3c756112--wholeContentPage-6c3f1fc5 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  flex: 1 1 auto;
+  margin: 0;
+  display: flex;
+  padding: 0;
+  max-width: 100%;
+  min-width: 0;
+  background: #fff;
+  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+}
+.reset-3c756112--wholePageSticky-f53dafd2 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  flex: 1 1 auto;
+  margin: 0;
+  display: flex;
+  padding: 0;
+  position: relative;
+  min-width: 0;
+}
+.reset-3c756112--pageContainer-3ec6d8d0 {
+  flex: 1 1 auto;
+  margin: 0px 16px;
+  display: block;
+  padding: 0;
+  max-width: 750px;
+  min-width: 0;
+  padding-bottom: 64px;
+}
+@media screen and (max-width: 1023px) {
+  .reset-3c756112--pageContainer-3ec6d8d0 {
+    margin: 0px auto;
+    padding: 0px 24px;
+  }
+}
+@media screen and (min-width: 1024px) {
+  .reset-3c756112--pageContainer-3ec6d8d0 {
+    margin: 0px 88px;
+  }
+}
+.reset-3c756112--pageHeader-15724735 {
+  margin: 0;
+  display: block;
+  padding: 0;
+  border-bottom: 2px solid #E6ECF1;
+  margin-bottom: 32px;
+}
+.reset-3c756112--pageHeaderInner-7c0f0284 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  flex: auto;
+  margin: 0;
+  display: flex;
+  padding: 40px 0px;
+}
+@media screen and (min-width: 768px) {
+  .reset-3c756112--pageHeaderInner-7c0f0284 {
+    flex-wrap: wrap;
+    align-items: baseline;
+    flex-direction: row;
+    -webkit-box-align: baseline;
+    -webkit-box-lines: multiple;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+  }
+}
+.reset-3c756112--pageHeaderWrapperContent-6897c946 {
+  flex: 1;
+  margin: 0;
+  display: block;
+  padding: 0;
+  position: relative;
+}
+.reset-3c756112--horizontalFlex-5a0077e0 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  margin: 0;
+  display: flex;
+  padding: 0;
+  align-items: stretch;
+  justify-content: space-between;
+  -webkit-box-pack: justify;
+  -webkit-box-align: stretch;
+}
+.reset-3c756112--pageHeaderIntro-0c1463da {
+  flex: 1 1 auto;
+  margin: 0;
+  display: block;
+  padding: 0;
+  padding-right: 16px;
+}
+.reset-3c756112--pageTitle-33dc39a3 {
+  color: #242A31;
+  width: 100%;
+  border: none;
+  margin: 0;
+  display: block;
+  outline: none;
+  padding: 0;
+  background: none;
+  border-radius: 3px;
+}
+.text-4505230f--DisplayH900-bfb998fa--textContentFamily-49a318e1 {
+  font-size: 32px;
+  font-family: Content-font, Roboto, sans-serif;
+  font-weight: 500;
+  line-height: 1.5;
+}
+.reset-3c756112--toolbar-a6a9f7d2--medium-8e46b02c--pageHeaderToolbar-6457a802--withControlsClosed-3e96e46c {
+  display: -ms-inline-grid;
+  margin: 0;
+  display: none;
+  padding: 0;
+  margin-top: 9px;
+  -ms-grid-rows: none;
+  grid-column-gap: 16px;
+  grid-template-rows: none;
+}
+@media screen and (max-width: 1279px) {
+  .reset-3c756112--toolbar-a6a9f7d2--medium-8e46b02c--pageHeaderToolbar-6457a802--withControlsClosed-3e96e46c {
+    display: block;
+  }
+}
+.button-36063075--small-30ceeddb--button-2b0d629c--small-54db2a94 {
+  display: -webkit-inline-box;
+  display: -moz-inline-box;
+  display: -ms-inline-flexbox;
+  display: -webkit-inline-flex;
+  color: #9DAAB6;
+  width: 30px;
+  border: 1px solid;
+  cursor: pointer;
+  height: 30px;
+  display: inline-flex;
+  outline: none;
+  padding: 0;
+  transition: all 250ms ease-out;
+  align-items: center;
+  line-height: 1em;
+  white-space: nowrap;
+  border-color: transparent;
+  border-radius: 3px;
+  -moz-transition: all 250ms ease-out;
+  justify-content: center;
+  text-decoration: none;
+  -webkit-box-pack: center;
+  background-color: transparent;
+  -webkit-box-align: center;
+  -webkit-transition: all 250ms ease-out;
+}
+.button-36063075--small-30ceeddb--button-2b0d629c--small-54db2a94:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+.button-36063075--small-30ceeddb--button-2b0d629c--small-54db2a94:hover {
+  color: #6BB6B6;
+}
+.small-3bde6db7--iconOnly-bddce91a {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  margin: 0;
+  display: flex;
+  font-size: 18px;
+  align-items: center;
+  justify-content: center;
+  -webkit-box-pack: center;
+  -webkit-box-align: center;
+}
+.text-4505230f--UIH300-2063425d--textUIFamily-5ebd8e40--text-8ee2c8b2 {
+  font-size: 14px;
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  line-height: 1em;
+}
+.reset-3c756112--pageHeaderDescription-22970244 {
+  flex: auto;
+  margin: 0;
+  display: block;
+  padding: 0;
+}
+.reset-3c756112--toaster-c029690e {
+  top: 16px;
+  left: 50%;
+  margin: 0;
+  display: block;
+  padding: 0;
+  z-index: 160;
+  position: fixed;
+  transform: translateX(-50%);
+}
+.reset-3c756112--pageBody-a91db4ac {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  margin: 0;
+  display: flex;
+  padding: 0;
+  position: relative;
+  font-size: 16px;
+  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+}
+.reset-3c756112--container-960c7c26 {
+  margin: 0;
+  display: block;
+  padding: 0;
+  position: relative;
+  margin-bottom: -24px;
+}
+.blockHeading-442b4f12 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  color: #242A31;
+  margin: 0;
+  display: flex;
+  position: relative;
+  margin-bottom: 24px;
+}
+.blockHeadingContent-756c9114 {
+  flex: 1;
+}
+.text-4505230f--HeadingH700-04e1a2a3--textContentFamily-49a318e1 {
+  font-size: 24px;
+  font-family: Content-font, Roboto, sans-serif;
+  font-weight: 700;
+  line-height: 1.5;
+}
+.blockHeadingAnchor-34f75d78--blockHeadingAnchorHidden-d69b5eda {
+  color: #242A31;
+  width: 20px;
+  opacity: 0;
+  transition: opacity 150ms ease;
+  line-height: 1em;
+  padding-left: 4px;
+  -moz-transition: opacity 150ms ease;
+  -webkit-transition: opacity 150ms ease;
+}
+.blockHeadingAnchor-34f75d78--blockHeadingAnchorHidden-d69b5eda:hover {
+  color: #3884FF;
+}
+@media print {
+  .blockHeadingAnchor-34f75d78--blockHeadingAnchorHidden-d69b5eda {
+    display: none;
+  }
+}
+.blockHeadingAnchorIcon-1c2bf3cb {
+  font-size: 16px;
+  vertical-align: middle;
+}
+.reset-3c756112--blockHeadingUp-c32402b2 {
+  width: 1em;
+  cursor: pointer;
+  height: 1em;
+  margin: 0;
+  display: block;
+  outline: none;
+  padding: 0;
+  line-height: 1em;
+}
+@media screen and (min-width: 768px) {
+  .reset-3c756112--blockHeadingUp-c32402b2 {
+    display: none;
+  }
+}
+@media print {
+  .reset-3c756112--blockHeadingUp-c32402b2 {
+    display: none;
+  }
+}
+.blockParagraph-544a408c {
+  color: inherit;
+  margin: 0;
+  position: relative;
+  margin-bottom: 24px;
+}
+.text-4505230f--TextH400-3033861f--textContentFamily-49a318e1 {
+  font-size: 16px;
+  font-family: Content-font, Roboto, sans-serif;
+  font-weight: 400;
+  line-height: 1.625;
+}
+.link-a079aa82--primary-53a25e66--link-faf6c434 {
+  color: #3884FF;
+  cursor: pointer;
+  text-decoration: none;
+}
+.link-a079aa82--primary-53a25e66--link-faf6c434:hover {
+  text-decoration: underline;
+}
+.bold-3c254bd9 {
+  font-weight: 700;
+}
+.blockHeading-442b4f12--blockHeading2WithMargin-532d771d {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  color: #242A31;
+  margin: 0;
+  display: flex;
+  position: relative;
+  margin-top: 32px;
+  margin-bottom: 24px;
+}
+.text-4505230f--HeadingH600-23f228db--textContentFamily-49a318e1 {
+  font-size: 20px;
+  font-family: Content-font, Roboto, sans-serif;
+  font-weight: 700;
+  line-height: 1.5;
+}
+.list-20526648 {
+  color: #3B454E;
+  margin: 0;
+  padding: 0;
+  padding-left: 2em;
+  margin-bottom: 24px;
+}
+.reset-3c756112--listItemContent-756c9114 {
+  flex: 1;
+  margin: 0;
+  display: block;
+  padding: 0;
+}
+.blockParagraph-544a408c--noMargin-acdf7afa {
+  color: inherit;
+  margin: 0;
+  position: relative;
+  margin-bottom: 0;
+}
+.reset-3c756112--figure-c0d4b308 {
+  margin: 32px auto;
+  display: block;
+  padding: 0;
+}
+.reset-3c756112--figureAlignCenter-2d9bf702 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  margin: 0;
+  display: flex;
+  padding: 0;
+  justify-content: center;
+  -webkit-box-pack: center;
+}
+.reset-3c756112--figureLayer-b6ab7c94 {
+  margin: 0;
+  display: block;
+  padding: 0;
+  position: relative;
+  max-width: 100%;
+}
+.image-52799b3c {
+  width: 100%;
+  display: block;
+  max-width: 100%;
+  max-height: 60vh;
+  object-fit: contain;
+}
+.zoomImage-27c3f277 {
+  object-fit: contain;
+}
+.blockHeading-442b4f12--blockHeading1WithMargin-b69d755e {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  color: #242A31;
+  margin: 0;
+  display: flex;
+  position: relative;
+  margin-top: 73px;
+  margin-bottom: 24px;
+}
+.blockHeading-442b4f12--blockHeading1WithMargin-b69d755e:before {
+  top: -32px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  content: " ";
+  position: absolute;
+  background-color: #E6ECF1;
+}
+.reset-3c756112--codeBlockWrapper-56f27afc {
+  margin: 0;
+  display: block;
+  padding: 0;
+  position: relative;
+}
+.reset-3c756112--copyButtonWrapper-ca591f6e {
+  top: 16px;
+  right: 16px;
+  margin: 0;
+  display: block;
+  padding: 0;
+  z-index: 1;
+  position: absolute;
+}
+@keyframes keyframes-animation-bd7e9c6a-0-1-244 {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.reset-3c756112--touchableView-a079aa82--copyButton-4f9a9412--tooltipped-57ae51fe {
+  color: #9DAAB6;
+  cursor: pointer;
+  margin: 0;
+  display: block;
+  opacity: 0.5;
+  outline: none;
+  padding: 8px;
+  position: relative;
+  font-size: 16px;
+  line-height: 1em;
+}
+.reset-3c756112--touchableView-a079aa82--copyButton-4f9a9412--tooltipped-57ae51fe:hover {
+  opacity: 1;
+}
+@media print {
+  .reset-3c756112--touchableView-a079aa82--copyButton-4f9a9412--tooltipped-57ae51fe {
+    display: none;
+  }
+}
+.reset-3c756112--touchableView-a079aa82--copyButton-4f9a9412--tooltipped-57ae51fe:after {
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  top: calc(100% + 16px);
+  left: 50%;
+  color: #FFFFFF;
+  width: max-content;
+  bottom: auto;
+  content: attr(aria-label);
+  display: none;
+  opacity: 0;
+  padding: 5px 8px;
+  z-index: 155;
+  position: absolute;
+  font-size: 12px;
+  max-width: 300px;
+  transform: translateX(-50%);
+  background: #242A31;
+  font-weight: 400;
+  line-height: 1.625;
+  white-space: normal;
+  border-radius: 3px;
+  animation-name: keyframes-animation-bd7e9c6a-0-1-244;
+  pointer-events: none;
+  text-transform: none;
+  animation-duration: 0.2s;
+  animation-fill-mode: forwards;
+}
+.reset-3c756112--touchableView-a079aa82--copyButton-4f9a9412--tooltipped-57ae51fe:before {
+  top: calc(100% + 8px);
+  left: 50%;
+  width: 0;
+  bottom: auto;
+  height: 0;
+  content: "";
+  display: none;
+  opacity: 0;
+  z-index: 156;
+  position: absolute;
+  transform: translateX(-50%);
+  border-color: #242A31 transparent;
+  border-style: solid;
+  animation-name: keyframes-animation-bd7e9c6a-0-1-244;
+  border-top-width: 0;
+  border-left-width: 8px;
+  animation-duration: 0.2s;
+  border-right-width: 8px;
+  animation-fill-mode: forwards;
+  border-bottom-width: 8px;
+}
+.reset-3c756112--touchableView-a079aa82--copyButton-4f9a9412--tooltipped-57ae51fe:hover:before {
+  display: block;
+}
+.reset-3c756112--touchableView-a079aa82--copyButton-4f9a9412--tooltipped-57ae51fe:hover:after {
+  display: block;
+}
+.reset-3c756112--codeBlock-75b39b81 {
+  color: #E6ECF1;
+  margin: 32px 0px;
+  display: block;
+  hyphens: none;
+  padding: 24px 24px 24px 8px;
+  overflow: auto;
+  tab-size: 2;
+  direction: ltr;
+  font-size: 14px;
+  background: #183055;
+  text-align: left;
+  word-break: normal;
+  -ms-hyphens: none;
+  font-family: "Source Code Pro", Consolas, Menlo, Monaco, Courier, monospace;
+  line-height: 1.4;
+  white-space: pre;
+  word-spacing: normal;
+  -moz-tab-size: 2;
+  border-radius: 3px;
+  -webkit-hyphens: none;
+}
+.reset-3c756112--codeBlock-75b39b81::selection {
+  background: #D3DCE4;
+  text-shadow: none;
+}
+.codeLine-a3169fbc {
+  font: inherit;
+  padding: 0px 0px;
+  position: relative;
+  word-wrap: normal;
+  white-space: pre;
+  padding-left: 44px;
+  padding-right: 14px;
+  counter-increment: line;
+}
+.codeLine-a3169fbc:not(:only-child):before {
+  top: 2px;
+  left: 4px;
+  color: #5C6975;
+  width: 24px;
+  bottom: 0;
+  content: counter(line);
+  display: inline-block;
+  overflow: hidden;
+  position: absolute;
+  font-size: 12px;
+  text-align: right;
+  user-select: none;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  background-color: transparent;
+  -webkit-user-select: none;
+}
+.codeLine-a3169fbc:only-child {
+  padding-left: 30px;
+}
+.blockHeading-442b4f12--blockHeading3WithMargin-532d7700 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  color: #242A31;
+  margin: 0;
+  display: flex;
+  position: relative;
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+.text-4505230f--HeadingH400-686c0942--textContentFamily-49a318e1 {
+  font-size: 16px;
+  font-family: Content-font, Roboto, sans-serif;
+  font-weight: 700;
+  line-height: 1.5;
+}
+.reset-3c756112--blockHint-a7403a60 {
+  width: 100%;
+  margin: 0;
+  display: block;
+  padding: 24px 24px calc(1px / 10) 50px;
+  position: relative;
+  margin-top: 32px;
+  border-left: 4px solid;
+  border-radius: 3px;
+  margin-bottom: 32px;
+  background-color: #F5F7F9;
+}
+.reset-3c756112--hintIcon-7c7981dd--paragraph-ae3112d0 {
+  top: 24px;
+  left: 16px;
+  margin: 0;
+  display: block;
+  padding: 0;
+  position: absolute;
+  font-size: 24px;
+}
+.code-81e98f88 {
+  margin: 0 1px;
+  display: inline-block;
+  padding: 3px 6px;
+  font-size: 85%;
+  font-family: "Source Code Pro", Menlo, monospace;
+  border-radius: 3px;
+  background-color: #F5F7F9;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+.code-81e98f88:after {
+  content: "\00a0";
+  letter-spacing: -1em;
+}
+.blockQuote-7a0db092 {
+  color: #74818D;
+  margin: 0;
+  padding: 0;
+  border-left: 4px solid;
+  border-color: #E6ECF1;
+  padding-left: 12px;
+  margin-bottom: 24px;
+}
+.blockParagraph-544a408c--blockParagraphQuoted-280e03a6 {
+  color: #74818D;
+  margin: 0;
+  position: relative;
+  margin-bottom: 24px;
+}
+.reset-3c756112--pageFooter-f1d5e2b0 {
+  margin: 0;
+  display: block;
+  padding: 0;
+  margin-top: 64px;
+}
+@media print {
+  .reset-3c756112--pageFooter-f1d5e2b0 {
+    display: none;
+  }
+}
+.reset-3c756112--navPagesLinks-67bea901 {
+  display: -ms-grid;
+  width: auto;
+  margin: 0;
+  display: grid;
+  padding: 0;
+  -ms-grid-rows: auto;
+  grid-column-gap: 24px;
+  -ms-grid-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  grid-template-areas: "previous next";
+  grid-template-columns: 1fr 1fr;
+}
+@media screen and (max-width: 767px) {
+  .reset-3c756112--navPagesLinks-67bea901 {
+    grid-row-gap: 24px;
+    -ms-grid-columns: 1fr;
+    grid-template-areas: "next" "previous";
+    grid-template-columns: 1fr;
+  }
+}
+.reset-3c756112--card-6570f064--whiteCard-fff091a4--cardPrevious-56a5e674 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  color: #242A31;
+  border: 1px solid #E6ECF1;
+  margin: 0;
+  display: flex;
+  padding: 0;
+  position: relative;
+  grid-area: previous;
+  align-self: stretch;
+  box-shadow: 0 3px 8px 0 rgba(116, 129, 141, 0.1);
+  transition: border 250ms ease;
+  align-items: center;
+  justify-self: stretch;
+  border-radius: 3px;
+  flex-direction: row;
+  -moz-transition: border 250ms ease;
+  text-decoration: none;
+  background-color: #FFFFFF;
+  -webkit-box-align: center;
+  page-break-inside: avoid;
+  -ms-grid-row-align: stretch;
+  -webkit-box-orient: horizontal;
+  -webkit-transition: border 250ms ease;
+  -ms-grid-column-align: stretch;
+  -webkit-box-direction: normal;
+}
+.reset-3c756112--cardIcon-5b647d22 {
+  flex: 0 0 auto;
+  color: #9DAAB6;
+  margin: 0;
+  display: block;
+  padding: 16px;
+  font-size: 24px;
+  transition: color 250ms ease;
+  -moz-transition: color 250ms ease;
+  -webkit-transition: color 250ms ease;
+}
+.reset-3c756112--cardIcon-5b647d22:first-child {
+  padding-right: 0;
+}
+.reset-3c756112--cardIcon-5b647d22:last-child {
+  padding-left: 0;
+}
+.reset-3c756112--cardBody-25dca3b1--cardPreviousBody-79f02c06 {
+  flex: 1;
+  margin: 0;
+  display: block;
+  padding: 16px;
+  text-align: right;
+}
+.reset-3c756112--cardHint-2c5d8183 {
+  color: #9DAAB6;
+  margin: 0;
+  display: block;
+  padding: 0;
+}
+.text-4505230f--TextH200-a3425406--textContentFamily-49a318e1 {
+  font-size: 12px;
+  font-family: Content-font, Roboto, sans-serif;
+  font-weight: 400;
+  line-height: 1.625;
+}
+.reset-3c756112--cardTitle-32aa092e {
+  margin: 0;
+  display: block;
+  padding: 0;
+  transition: color 250ms ease;
+  -moz-transition: color 250ms ease;
+  -webkit-transition: color 250ms ease;
+}
+.text-4505230f--UIH400-4e41e82a--textContentFamily-49a318e1 {
+  font-size: 16px;
+  font-family: Content-font, Roboto, sans-serif;
+  font-weight: 500;
+  line-height: 1.5;
+}
+.reset-3c756112--card-6570f064--whiteCard-fff091a4--cardNext-19241c42 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  color: #242A31;
+  border: 1px solid #E6ECF1;
+  margin: 0;
+  display: flex;
+  padding: 0;
+  position: relative;
+  grid-area: next;
+  align-self: stretch;
+  box-shadow: 0 3px 8px 0 rgba(116, 129, 141, 0.1);
+  transition: border 250ms ease;
+  align-items: center;
+  justify-self: stretch;
+  border-radius: 3px;
+  flex-direction: row;
+  -moz-transition: border 250ms ease;
+  text-decoration: none;
+  background-color: #FFFFFF;
+  -webkit-box-align: center;
+  page-break-inside: avoid;
+  -ms-grid-row-align: stretch;
+  -webkit-box-orient: horizontal;
+  -webkit-transition: border 250ms ease;
+  -ms-grid-column-align: stretch;
+  -webkit-box-direction: normal;
+}
+.reset-3c756112--cardBody-25dca3b1 {
+  flex: 1;
+  margin: 0;
+  display: block;
+  padding: 16px;
+}
+.reset-3c756112--pageFooterColumns-ef8f347e {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  margin: 0;
+  display: flex;
+  padding: 0;
+  border-top: 2px solid #E6ECF1;
+  margin-top: 24px;
+  align-items: center;
+  padding-top: 24px;
+  flex-direction: row;
+  -webkit-box-align: center;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+}
+@media screen and (max-width: 767px) {
+  .reset-3c756112--pageFooterColumns-ef8f347e {
+    align-items: stretch;
+    flex-direction: column;
+    -webkit-box-align: stretch;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+  }
+}
+.reset-3c756112--pageFooterSummary-12074aff {
+  flex: 1;
+  margin: 0;
+  display: block;
+  padding: 0;
+}
+@media screen and (max-width: 767px) {
+  .reset-3c756112--pageFooterSummary-12074aff {
+    margin-bottom: 16px;
+  }
+}
+.reset-3c756112--pageChangesSummary-08821678 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  flex: auto;
+  margin: 0;
+  display: flex;
+  padding: 0;
+  align-items: center;
+  -webkit-box-align: center;
+}
+.reset-3c756112--pageContributors-5c59582e {
+  flex: 0 0 auto;
+  margin: 0;
+  display: block;
+  padding: 0;
+  margin-right: 8px;
+}
+.reset-3c756112--ownerAvatarList-696792ce {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  margin: 0;
+  display: flex;
+  padding: 0;
+  flex-direction: row-reverse;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: reverse;
+}
+.reset-3c756112--pageEditedDate-b805c39a {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  flex: auto;
+  color: #9DAAB6;
+  margin: 0;
+  display: flex;
+  padding: 0;
+}
+.reset-3c756112--pageSide-ad9fed26 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  flex: 0 0 auto;
+  width: 224px;
+  margin: 0;
+  display: flex;
+  padding: 0;
+  position: relative;
+  margin-right: auto;
+}
+@media print {
+  .reset-3c756112--pageSide-ad9fed26 {
+    display: none;
+  }
+}
+@media screen and (max-width: 1279px) {
+  .reset-3c756112--pageSide-ad9fed26 {
+    display: none;
+  }
+}
+.reset-3c756112--stickyContainer-2bed3a82 {
+  flex: 1;
+  margin: 0;
+  display: block;
+  padding: 0;
+  max-width: 100%;
+}
+.reset-3c756112--tocWrapper-506ea24c {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  height: 100%;
+  margin: 0;
+  display: flex;
+  padding: 0;
+  padding-top: 40px;
+  flex-direction: column;
+  padding-bottom: 40px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisY-7680295e--scrollableContainer-756c9114 {
+  overflow-y: auto;
+  flex: 1;
+  margin: 0;
+  display: block;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: overlay;
+  -webkit-overflow-scrolling: touch;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisY-7680295e--scrollableContainer-756c9114::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+  display: none;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisY-7680295e--scrollableContainer-756c9114::-webkit-scrollbar-track {
+  background: none;
+  border-width: 0;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisY-7680295e--scrollableContainer-756c9114::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,.16);
+  transition: background 250ms ease;
+  border-radius: 2px;
+  -moz-transition: background 250ms ease;
+  -webkit-transition: background 250ms ease;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisY-7680295e--scrollableContainer-756c9114::-webkit-scrollbar-button {
+  display: none;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisY-7680295e--scrollableContainer-756c9114::-webkit-scrollbar-track-piece {
+  display: none;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisY-7680295e--scrollableContainer-756c9114::-webkit-scrollbar-corner {
+  display: none;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisY-7680295e--scrollableContainer-756c9114::-webkit-resizer {
+  display: none;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisY-7680295e--scrollableContainer-756c9114:hover::-webkit-scrollbar {
+  display: initial;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisY-7680295e--scrollableContainer-756c9114:hover::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,.16);
+}
+.reset-3c756112--pageSideSection-542f1fd5 {
+  margin: 0;
+  display: block;
+  padding: 0;
+  position: relative;
+}
+.reset-3c756112--pageSideSection-542f1fd5:before {
+  top: 0;
+  left: 0;
+  height: 100%;
+  content: " ";
+  position: absolute;
+  border-left: 1px solid #E6ECF1;
+}
+.reset-3c756112--menu-5b8a7448--pageToc-16c35922--pageTocLive-542f1fd5 {
+  display: -webkit-box;
+  flex: 1;
+  margin: 0;
+  display: flex;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+  min-width: 224px;
+  counter-reset: toc;
+  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+}
+@media print {
+  .reset-3c756112--menu-5b8a7448--pageToc-16c35922--pageTocLive-542f1fd5 {
+    display: none;
+  }
+}
+.reset-3c756112--menu-5b8a7448--pageToc-16c35922--pageTocLive-542f1fd5:before {
+  top: 0;
+  left: 0;
+  height: 100%;
+  content: " ";
+  position: absolute;
+  border-left: 1px solid #E6ECF1;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisY-7680295e--menuItems-2e6f017b--pageTocLiveItems-67c61496 {
+  overflow-y: auto;
+  flex: 1;
+  margin: 0;
+  display: block;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: overlay;
+  -webkit-overflow-scrolling: touch;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisY-7680295e--menuItems-2e6f017b--pageTocLiveItems-67c61496::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+  display: none;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisY-7680295e--menuItems-2e6f017b--pageTocLiveItems-67c61496::-webkit-scrollbar-track {
+  background: none;
+  border-width: 0;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisY-7680295e--menuItems-2e6f017b--pageTocLiveItems-67c61496::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,.16);
+  transition: background 250ms ease;
+  border-radius: 2px;
+  -moz-transition: background 250ms ease;
+  -webkit-transition: background 250ms ease;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisY-7680295e--menuItems-2e6f017b--pageTocLiveItems-67c61496::-webkit-scrollbar-button {
+  display: none;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisY-7680295e--menuItems-2e6f017b--pageTocLiveItems-67c61496::-webkit-scrollbar-track-piece {
+  display: none;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisY-7680295e--menuItems-2e6f017b--pageTocLiveItems-67c61496::-webkit-scrollbar-corner {
+  display: none;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisY-7680295e--menuItems-2e6f017b--pageTocLiveItems-67c61496::-webkit-resizer {
+  display: none;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisY-7680295e--menuItems-2e6f017b--pageTocLiveItems-67c61496:hover::-webkit-scrollbar {
+  display: initial;
+}
+.reset-3c756112--withScrollbar-39338630--scrollAxisY-7680295e--menuItems-2e6f017b--pageTocLiveItems-67c61496:hover::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,.16);
+}
+.reset-3c756112--menuHeader-342906de--menuHeaderLight-2c5d8183 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  color: #9DAAB6;
+  margin: 0;
+  display: flex;
+  padding: 0;
+  padding-left: 24px;
+  margin-bottom: 8px;
+}
+.reset-3c756112--menuHeaderIcon-0c3ed569 {
+  margin: 0;
+  display: block;
+  padding: 0;
+  margin-right: 8px;
+}
+.text-4505230f--InfoH100-1e92e1d1--textContentFamily-49a318e1 {
+  font-size: 10px;
+  font-family: Content-font, Roboto, sans-serif;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+.reset-3c756112--menuItem-aa02f6ec--menuItemLight-757d5235--menuItemInline-173bdf97--pageTocItem-f4427024 {
+  display: -webkit-box;
+  color: #74818D;
+  cursor: pointer;
+  margin: 0;
+  display: flex;
+  padding: 4px 16px;
+  align-items: center;
+  padding-left: 24px;
+  vertical-align: middle;
+  text-decoration: none;
+  -webkit-box-align: center;
+}
+.reset-3c756112--menuItem-aa02f6ec--menuItemLight-757d5235--menuItemInline-173bdf97--pageTocItem-f4427024:hover {
+  background: none;
+  text-decoration: inherit;
+}
+.link-a079aa82--primary-53a25e66 {
+  color: #3884FF;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.reset-3c756112--menuItemContent-c44ec79e {
+  margin: 0;
+  display: block;
+  padding: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.text-4505230f--UIH300-2063425d--textContentFamily-49a318e1 {
+  font-size: 14px;
+  font-family: Content-font, Roboto, sans-serif;
+  font-weight: 500;
+  line-height: 1.5;
+}
+.text-4505230f--UIH200-50ead35f--textContentFamily-49a318e1 {
+  font-size: 12px;
+  font-family: Content-font, Roboto, sans-serif;
+  font-weight: 500;
+  line-height: 1.5;
+}
+.text-4505230f--UIH200-50ead35f--textContentFamily-49a318e1--pageTocLinkH2-2294976c {
+  font-size: 12px;
+  font-family: Content-font, Roboto, sans-serif;
+  font-weight: 500;
+  line-height: 1.5;
+  padding-left: 16px;
+}</style>
+        </head>
+        <body>
+            <div id="__GITBOOK__ROOT__SERVER__"><div class="reset-3c756112--body-68cac36c" data-reactroot=""><div class="reset-3c756112--header-07037613--header-11420428"><div class="reset-3c756112--headerContainer-bb8cc0bc"><div class="reset-3c756112--headerLeftColumn-4eae0bae--headerLeftColumn-7efc9f26"><div role="button" tabindex="-1" class="reset-3c756112--mobileButton-7a76d05f"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" class="icon-7f6730be--text-3f89f380--icon-1f8349b3"><g><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></g></svg></div><div class="reset-3c756112--headerLogo-5c0b38e2"><div class="reset-3c756112--mobileLogo-dacfd15c"><a class="link-a079aa82--primary-53a25e66--logoLink-10d08504" style="color:#6BB6B6" href="/"><div class="reset-3c756112--logoContainer-da09bede--iconBackground-2463e710--logoContainerS-2ec8ae1a"><span class="wrapper-c9de902e" style="width:24px;height:24px"><span class="emojione emojione-40-objects _1f58c emoji-64354ccb" role="img" alt="🖌" title=":paintbrush:" aria-label=":paintbrush:" style="transform:translate(-50%, -55%) scale(0.6);text-indent:0em;font-size:0;color:rgba(0,0,0,0)">🖌</span></span></div><div class="reset-3c756112--S100Left-7c8af13a--logoDisplayNameContainer-583bfe61--logoText-622a9478"><span class="text-4505230f--DisplayH700-a03ad9b4--textContentFamily-49a318e1--spaceNameText-677c2969">JVM实验框架文档</span></div></a></div><div class="reset-3c756112--desktopLogo-a594db90"><a class="link-a079aa82--primary-53a25e66--logoLink-10d08504" style="color:#6BB6B6" href="/"><div class="reset-3c756112--logoContainer-da09bede--iconBackground-2463e710--logoContainerM-296350e4"><span class="wrapper-c9de902e" style="width:30px;height:30px"><span class="emojione emojione-40-objects _1f58c emoji-64354ccb" role="img" alt="🖌" title=":paintbrush:" aria-label=":paintbrush:" style="transform:translate(-50%, -55%) scale(0.75);text-indent:0em;font-size:0;color:rgba(0,0,0,0)">🖌</span></span></div><div class="reset-3c756112--S100Left-7c8af13a--logoDisplayNameContainer-583bfe61--logoText-622a9478"><span class="text-4505230f--DisplayH700-a03ad9b4--textContentFamily-49a318e1--spaceNameText-677c2969">JVM实验框架文档</span></div></a></div></div><div role="button" tabindex="-1" class="reset-3c756112--mobileButton-7a76d05f"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" class="icon-7f6730be--text-3f89f380--icon-1f8349b3"><g><circle cx="10.5" cy="10.5" r="7.5"></circle><line x1="21" y1="21" x2="15.8" y2="15.8"></line></g></svg></div></div><div class="reset-3c756112--headerInnerWrapper-629f79d1--headerInnerWrapper-4f99acea"><div class="reset-3c756112--withScrollbar-39338630--scrollAxisX-bf86cd6c--headerInner-c872fc48"></div></div><div class="reset-3c756112--searchInputWrapper-ea7f3052--searchInputWrapper-0442d130"><div class="reset-3c756112--inputContainer-b2cb171c"><div aria-label="" class="reset-3c756112--inputWrapper-63396dac--TextH400-3033861f--medium-4505230f--light-502263b4--input-6d442051--searchInput-3fa812d5"><div class="reset-3c756112--inputInnerSizer-756c9114"><input type="text" placeholder="搜索文档..." class="inputInner-5c86b87d--medium-0bbed4bd--inputInner-4216b016--searchInputPlaceholder-936306be"/></div><div class="reset-3c756112--inputAddOn-45de9ec1--inputAddOnPrefix-202fa60d--icon-1f8349b3"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" class="icon-7f6730be--text-3f89f380"><g><circle cx="10.5" cy="10.5" r="7.5"></circle><line x1="21" y1="21" x2="15.8" y2="15.8"></line></g></svg></div></div></div></div></div></div><div class="reset-3c756112--bodyContent-2f98451b"><div class="reset-3c756112--wholeContent-9fc567d4"><div class="reset-3c756112--wholeContentBody-554be184"><div role="presentation" class="reset-3c756112--backdrop-1322b68a--hidden-247382c3--overlay-29559ab8"></div><div class="reset-3c756112--contentNavigation-dd3370a4"><div class="reset-3c756112--contentNavigationInner-205d49ea--contentNavigationInnerCollapsed-7b4aca00"><div class="reset-3c756112--sidebarWrapper-84a13d8e"><div style="padding-bottom:0" class="reset-3c756112"></div><div class="reset-3c756112--sidebar-84a13d8e"><div class="reset-3c756112--sidebarMain-13701e8f"><div class="reset-3c756112--withScrollbar-39338630--scrollAxisY-7680295e--sidebarInner-18a1e7fe"><div class="reset-3c756112--mobileHeader-4e2d4892"><div role="button" tabindex="-1" class="reset-3c756112--mobileHeaderClose-47b8fa64"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" class="icon-7f6730be--text-3f89f380"><g><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></g></svg></div></div><div class="reset-3c756112--pagesTree-4b07cd56"><div class="reset-3c756112--pageItem-01e3f344"><div class="reset-3c756112--pageComponent-7cc5301a"><a class="navButton-94f2579c--navButtonClickable-161b88ca" href="/"><span class="text-4505230f--UIH300-2063425d--textContentFamily-49a318e1--navButtonLabel-14a4968f">生存指南</span></a></div></div><div class="reset-3c756112"><div class="reset-3c756112--pageItemWithChildren-56f27afc"><div class="reset-3c756112"><div class="reset-3c756112--pageItem-01e3f344"><div class="reset-3c756112--pageComponent-7cc5301a"><a class="navButton-94f2579c--navButtonClickable-161b88ca" href="/xiang-guan-jiao-cai-tui-jian"><span class="text-4505230f--UIH300-2063425d--textContentFamily-49a318e1--navButtonLabel-14a4968f">相关教材推荐</span></a></div></div></div></div><div class="reset-3c756112--pageItemWithChildren-56f27afc--S300Bottom-9b4658d2"><div class="reset-3c756112"><div class="reset-3c756112--pageItem-01e3f344"><div class="reset-3c756112--pageComponent-7cc5301a"><a class="navButton-94f2579c--navButtonClickable-161b88ca" href="/tools"><span class="text-4505230f--UIH300-2063425d--textContentFamily-49a318e1--navButtonLabel-14a4968f">工具安利(施工中)</span></a></div></div></div></div><div class="reset-3c756112--pageItemWithChildren-56f27afc--S300Bottom-9b4658d2"><div class="reset-3c756112"><div class="reset-3c756112--pageItem-01e3f344"><div class="reset-3c756112--pageComponent-7cc5301a"><div class="reset-3c756112--navButton-94f2579c--pageGroup-2c5d8183"><span class="text-4505230f--UIH300-2063425d--textContentFamily-49a318e1--navButtonLabel-14a4968f"><span class="text-4505230f--InfoH200-3a8a7a86--textContentFamily-49a318e1">mooc minilab</span></span></div></div></div></div><div class="reset-3c756112--pageChildren-56f27afc--pageGroupChildren-2d50aefa"><div class="reset-3c756112"><div class="reset-3c756112--pageItemWithChildren-56f27afc"><div class="reset-3c756112"><div class="reset-3c756112--pageItem-01e3f344"><div class="reset-3c756112--pageComponent-7cc5301a"><a class="navButton-94f2579c--navButtonClickable-161b88ca" href="/mooc-minilab/command-line-util"><span class="text-4505230f--UIH300-2063425d--textContentFamily-49a318e1--navButtonLabel-14a4968f">Lab1 CommandLineUtil</span></a></div></div></div></div><div class="reset-3c756112--pageItemWithChildren-56f27afc"><div class="reset-3c756112"><div class="reset-3c756112--pageItem-01e3f344"><div class="reset-3c756112--pageComponent-7cc5301a"><a class="navButton-94f2579c--navButtonClickable-161b88ca" href="/mooc-minilab/class-file-reader"><span class="text-4505230f--UIH300-2063425d--textContentFamily-49a318e1--navButtonLabel-14a4968f">Lab2 ClassFileReader</span></a></div></div></div></div><div class="reset-3c756112--pageItemWithChildren-56f27afc--S300Bottom-9b4658d2"><div class="reset-3c756112"><div class="reset-3c756112--pageItem-01e3f344"><div class="reset-3c756112--pageComponent-7cc5301a"><a class="navButton-94f2579c--navButtonClickable-161b88ca--navButtonOpened-6a88552e" style="color:#6BB6B6" href="/mooc-minilab/class-file-parser"><span class="text-4505230f--UIH300-2063425d--textContentFamily-49a318e1--navButtonLabel-14a4968f">Lab3 ClassFileParser</span></a></div></div></div></div></div></div></div><div class="reset-3c756112--pageItemWithChildren-56f27afc--S300Bottom-9b4658d2"><div class="reset-3c756112"><div class="reset-3c756112--pageItem-01e3f344"><div class="reset-3c756112--pageComponent-7cc5301a"><div class="reset-3c756112--navButton-94f2579c--pageGroup-2c5d8183"><span class="text-4505230f--UIH300-2063425d--textContentFamily-49a318e1--navButtonLabel-14a4968f"><span class="text-4505230f--InfoH200-3a8a7a86--textContentFamily-49a318e1">JVVM Framework</span></span></div></div></div></div><div class="reset-3c756112--pageChildren-56f27afc--pageGroupChildren-2d50aefa"><div class="reset-3c756112"><div class="reset-3c756112--pageItemWithChildren-56f27afc--S300Bottom-9b4658d2"><div class="reset-3c756112"><div class="reset-3c756112--pageItem-01e3f344"><div class="reset-3c756112--pageComponent-7cc5301a"><a class="navButton-94f2579c--navButtonClickable-161b88ca" href="/jvvm-framework/framework-intro"><span class="text-4505230f--UIH300-2063425d--textContentFamily-49a318e1--navButtonLabel-14a4968f">Framework Intro(施工中)</span><span class="reset-3c756112--navButtonIcon-433c72ce--navButtonIconClickable-11a89312" role="presentation"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" class="icon-7f6730be--text-3f89f380"><g><polyline points="9 18 15 12 9 6"></polyline></g></svg></span></a></div></div></div></div></div></div></div></div></div></div><div class="reset-3c756112--footer-68e6f18c"><a href="https://www.gitbook.com/?utm_source=content&amp;utm_medium=trademark&amp;utm_campaign=minguw" target="_blank" class="reset-3c756112--trademark-a8da4b94" role="presentation"><div class="reset-3c756112--trademarkLogo-0d2d53bc"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="currentColor" viewBox="0 0 1067 769" xmlns="http://www.w3.org/2000/svg" stroke="none" class="icon-7f6730be--text-3f89f380"><g><path d="M480.026 640.677c17.205 0 31.2 13.997 31.2 31.194s-13.995 31.193-31.2 31.193c-17.197 0-31.193-13.996-31.193-31.193 0-17.197 13.996-31.194 31.193-31.194m489.93-193.226c-17.203 0-31.2-13.998-31.2-31.195 0-17.204 13.997-31.2 31.2-31.2 17.198 0 31.194 13.996 31.194 31.2 0 17.197-13.996 31.195-31.193 31.195m0-127.804c-53.269 0-96.609 43.34-96.609 96.609 0 10.373 1.723 20.702 5.123 30.741L559.328 616.879c-18.132-26.128-47.521-41.617-79.302-41.617-36.821 0-70.391 21.065-86.63 54.003L106.68 478.109c-30.288-15.927-52.965-65.817-50.56-111.223 1.248-23.687 9.438-42.071 21.897-49.17 7.916-4.493 17.436-4.099 27.526 1.188l1.916 1.01c75.96 40.022 324.6 170.981 335.063 175.844 16.157 7.47 25.14 10.5 52.659-2.547l513.958-267.3c7.53-2.844 16.315-10.062 16.315-21.023 0-15.205-15.72-21.199-15.765-21.199-29.218-14.018-74.163-35.054-117.987-55.57C798.033 84.26 691.861 34.547 645.23 10.132c-40.253-21.072-72.655-3.311-78.432.282l-11.227 5.555C345.727 119.743 64.898 258.826 48.911 268.553 20.278 285.973 2.547 320.679.252 363.768c-3.586 68.304 31.261 139.506 81.069 165.634l303.172 156.354c6.83 47.306 47.55 82.725 95.532 82.725 52.78 0 95.808-42.546 96.603-95.14L910.541 492.38c16.93 13.233 37.92 20.486 59.416 20.486 53.268 0 96.61-43.341 96.61-96.61s-43.342-96.61-96.61-96.61" fill-rule="evenodd"></path></g></svg></div><div class="reset-3c756112--trademarkContent-04a01aea"><div class="reset-3c756112"><span class="text-4505230f--TextH200-a3425406--textUIFamily-5ebd8e40">由 <b>GitBook</b> 提供支持</span></div></div></a></div></div></div></div></div></div><div class="reset-3c756112--wholeContentPage-6c3f1fc5"><div class="reset-3c756112--wholePageSticky-f53dafd2"><div class="reset-3c756112--pageContainer-3ec6d8d0"><div class="reset-3c756112"><div class="reset-3c756112--pageHeader-15724735"><div class="reset-3c756112--pageHeaderInner-7c0f0284"><div class="reset-3c756112--pageHeaderWrapperContent-6897c946"><div class="reset-3c756112--horizontalFlex-5a0077e0"><div class="reset-3c756112--pageHeaderIntro-0c1463da"><h1 class="reset-3c756112--pageTitle-33dc39a3"><span class="text-4505230f--DisplayH900-bfb998fa--textContentFamily-49a318e1">Lab3 ClassFileParser</span></h1></div><div style="grid-template-columns:repeat(1, auto)" class="reset-3c756112--toolbar-a6a9f7d2--medium-8e46b02c--pageHeaderToolbar-6457a802--withControlsClosed-3e96e46c"><button class="button-36063075--small-30ceeddb--button-2b0d629c--small-54db2a94"><span class="small-3bde6db7--iconOnly-bddce91a"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" class="icon-7f6730be--text-3f89f380"><g><line x1="21" y1="10" x2="7" y2="10"></line><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="14" x2="3" y2="14"></line><line x1="21" y1="18" x2="7" y2="18"></line></g></svg></span><span class="text-4505230f--UIH300-2063425d--textUIFamily-5ebd8e40--text-8ee2c8b2"></span></button></div></div><div class="reset-3c756112--pageHeaderDescription-22970244"></div></div></div></div><div class="reset-3c756112--toaster-c029690e"></div><div class="reset-3c756112--pageBody-a91db4ac"><div data-editioncontainer="true" class="reset-3c756112--container-960c7c26"><div data-slate-editor="true" data-key="16831a4a353840d79e32125687bd18c7" autoCorrect="on" spellcheck="true" data-gramm="false" style="outline:none;white-space:pre-wrap;word-wrap:break-word"><h1 id="0-zhong-yao-shuo-ming" class="blockHeading-442b4f12" data-key="d84b8eb101ff4f288d36caf83caa1a96"><div class="blockHeadingContent-756c9114"><span class="text-4505230f--HeadingH700-04e1a2a3--textContentFamily-49a318e1"><span data-key="cfe97fda99f74f979d3110a1b4cd5cf1"><span data-offset-key="cfe97fda99f74f979d3110a1b4cd5cf1:0">0. 重要说明</span></span></span><a href="#0-zhong-yao-shuo-ming" contenteditable="false" class="blockHeadingAnchor-34f75d78--blockHeadingAnchorHidden-d69b5eda"><span class="blockHeadingAnchorIcon-1c2bf3cb"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" class="icon-7f6730be--text-3f89f380"><g><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></g></svg></span></a></div><div role="button" tabindex="0" style="color:#6BB6B6" contenteditable="false" class="reset-3c756112--blockHeadingUp-c32402b2"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" class="icon-7f6730be--text-3f89f380"><g><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></g></svg></div></h1><p class="blockParagraph-544a408c" data-key="0ebd5479c6a04eafa3b750996ecab1e7"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="a2daee483bd34190ab987bce3eb2dda8"><span data-offset-key="a2daee483bd34190ab987bce3eb2dda8:0">从本次实验开始，我们将使用第八版</span></span><a class="link-a079aa82--primary-53a25e66--link-faf6c434" style="color:#6BB6B6" href="https://docs.oracle.com/javase/specs/jvms/se8/html/index.html" target="_blank" rel="noopener noreferrer" data-key="b3a39242e569499a9249ecb9abdfcde5"><span data-key="af27a1b36e264b5b8fb75b46093c80f9"><span data-offset-key="af27a1b36e264b5b8fb75b46093c80f9:0">JVM规范</span></span></a><span data-key="2582ea5374704a32be0188f8c7b58f8a"><span data-offset-key="2582ea5374704a32be0188f8c7b58f8a:0">作为辅助教材，网络上也有中文版的资源可以自行下载，但需要说明，部分实现细节依旧推荐直接看英文版，中文版中有很多翻译容易引起歧义。</span></span></span></p><p class="blockParagraph-544a408c" data-key="1455c937ff91480b89c181ec561d6c84"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="2e946b62623343d58b80b302ffaf0e79"><span data-offset-key="2e946b62623343d58b80b302ffaf0e79:0">看很长的英文文档绝对是一个痛苦的过程，但这个过程会对你有非常大的帮助。在阅读文档时，我们不推荐一次性把文档中的每一个细节都弄清楚，也不推荐把大量的章节读完之后再开始编码。我们会在每一次的实验中规定需要读完的部分，更好的一种做法是先有个大概了解之后再在编码中反复验证自己的理解是否正确，是否有更多的细节需要注意。</span></span></span></p><p class="blockParagraph-544a408c" data-key="1a24de12621d4c8ea5ac99c02e202e2d"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="1e41ee54ec834622bf49f24db8bcf0ae"><span data-offset-key="1e41ee54ec834622bf49f24db8bcf0ae:0">同时，从第三次实验开始，将进行查重。因为框架代码的存在，对重复率的比重要求会相对放低。</span><span data-offset-key="1e41ee54ec834622bf49f24db8bcf0ae:1"><strong class="bold-3c254bd9" data-slate-leaf="true">但是</strong></span><span data-offset-key="1e41ee54ec834622bf49f24db8bcf0ae:2">，我们必须提醒，有很多看起来能够绕开查重的”聪明办法“实际上是不可行的，这里有一篇延伸阅读</span></span><a class="link-a079aa82--primary-53a25e66--link-faf6c434" style="color:#6BB6B6" href="https://zhuanlan.zhihu.com/p/40568346" target="_blank" rel="noopener noreferrer" data-key="e459ab3a5a804eab916bd0015e9d2635"><span data-key="bf915aab0e0c4aaf8758ca67cac51991"><span data-offset-key="bf915aab0e0c4aaf8758ca67cac51991:0">《代码抄袭：那些让985学生沉默，211学生流泪的真相》</span></span></a><span data-key="6fb796987ac349a69a47d061779a13e1"><span data-offset-key="6fb796987ac349a69a47d061779a13e1:0"><span data-slate-zero-width="z">​</span></span></span></span></p><h2 id="shi-yan-geng-xin-shuo-ming" class="blockHeading-442b4f12--blockHeading2WithMargin-532d771d" data-key="3d7acca16c154b5191c0765277cab8c7"><div class="blockHeadingContent-756c9114"><span class="text-4505230f--HeadingH600-23f228db--textContentFamily-49a318e1"><span data-key="1f391cad6b1849dfbc9884f4472750ab"><span data-offset-key="1f391cad6b1849dfbc9884f4472750ab:0">实验更新说明</span></span></span><a href="#shi-yan-geng-xin-shuo-ming" contenteditable="false" class="blockHeadingAnchor-34f75d78--blockHeadingAnchorHidden-d69b5eda"><span class="blockHeadingAnchorIcon-1c2bf3cb"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" class="icon-7f6730be--text-3f89f380"><g><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></g></svg></span></a></div></h2><ol class="list-20526648" data-key="1cfc652d39524865bef37109d35cc784"><li class=""><div data-key="d632c65e2f7d4550bf869e716e2a3256" class="reset-3c756112--listItemContent-756c9114"><p class="blockParagraph-544a408c--noMargin-acdf7afa" data-key="a4ade08ee36a4bfea2b765f74797eb23"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="b913d716d67c4b05b23256b836488cf6"><span data-offset-key="b913d716d67c4b05b23256b836488cf6:0">如果clone了项目之后出现get方法报红的情况，可能需要在IDEA中安装lombok插件。具体方法如下</span></span></span></p></div></li></ol><div data-slate-void="true" data-key="e36dc2c0656044d88670e7157524cf7e"><div><figure data-key="e36dc2c0656044d88670e7157524cf7e" contenteditable="false" class="reset-3c756112--figure-c0d4b308"><div class="reset-3c756112--figureAlignCenter-2d9bf702"><div class="reset-3c756112--figureLayer-b6ab7c94"><img tabindex="0" src="https://gblobscdn.gitbook.com/assets%2F-M7HTVnrQXURnsIjLi0Q%2F-M7fvr7TPNvzNiV7xkX3%2F-M7g5yna9rjxRISTlhWN%2FDM_%60G%609%24U%60~5EC%5DA0S9%7B5JM.png?alt=media&amp;token=f21e9c39-ae9a-44d6-a3eb-e06d654617b5" class="image-52799b3c" style="cursor:zoom-in"/></div></div><div class="reset-3c756112--figureAlignCenter-2d9bf702"></div></figure></div></div><p class="blockParagraph-544a408c" data-key="b022ad3211004c1792239502ccacc3f8"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="fea230ca899e47cc81e8c353127a0250"><span data-offset-key="fea230ca899e47cc81e8c353127a0250:0"><strong class="bold-3c254bd9" data-slate-leaf="true"><span data-slate-zero-width="n">​</span></strong></span></span></span></p><p class="blockParagraph-544a408c" data-key="a249e1457c5c42819d0082de13119ff7"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="c0ef565aaf0c48158242580430eeb5dc"><span data-offset-key="c0ef565aaf0c48158242580430eeb5dc:0"><strong class="bold-3c254bd9" data-slate-leaf="true">2. UTF8Info中的String变量一定一定一定要命名为myString！！！不然会从JVVM-tool.jar中抛出一个框架代码的问题。由于平台上的版本不太好修改，只能请同学们自己注意了。</strong></span></span></span></p><p class="blockParagraph-544a408c" data-key="f7d60429c77044ef98d29ed31ef475dc"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="35492351ddd3440098380454d1e950b0"><span data-offset-key="35492351ddd3440098380454d1e950b0:0"><span data-slate-zero-width="n">​</span></span></span></span></p><h1 id="1-shi-yan-bei-jing" class="blockHeading-442b4f12--blockHeading1WithMargin-b69d755e" data-key="3a3158f9605a4b39882fb6219a972e2d"><div class="blockHeadingContent-756c9114"><span class="text-4505230f--HeadingH700-04e1a2a3--textContentFamily-49a318e1"><span data-key="4a07bc2823e64160831a0eb9e9e199ed"><span data-offset-key="4a07bc2823e64160831a0eb9e9e199ed:0">1. 实验背景</span></span></span><a href="#1-shi-yan-bei-jing" contenteditable="false" class="blockHeadingAnchor-34f75d78--blockHeadingAnchorHidden-d69b5eda"><span class="blockHeadingAnchorIcon-1c2bf3cb"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" class="icon-7f6730be--text-3f89f380"><g><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></g></svg></span></a></div><div role="button" tabindex="0" style="color:#6BB6B6" contenteditable="false" class="reset-3c756112--blockHeadingUp-c32402b2"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" class="icon-7f6730be--text-3f89f380"><g><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></g></svg></div></h1><p class="blockParagraph-544a408c" data-key="b01bc9f728424aea9a195f3037a71148"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="b11383d121a343a89b0a0943dd446fa0"><span data-offset-key="b11383d121a343a89b0a0943dd446fa0:0">在上一次的实验中我们已经使用一个ClassFileReader根据类名读取到了class文件，在本次的实验中我们将进一步对这个文件进行操作。JVM规范中使用了一个类似C语言的结构体语法来描述class文件 ：</span></span></span></p><div class="reset-3c756112--codeBlockWrapper-56f27afc"><div contenteditable="false" class="reset-3c756112--copyButtonWrapper-ca591f6e"><div aria-label="Copy" role="button" tabindex="0" class="reset-3c756112--touchableView-a079aa82--copyButton-4f9a9412--tooltipped-57ae51fe"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" class="icon-7f6730be--text-3f89f380"><g><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></g></svg></div></div><pre data-key="1883996c616142a8b31a60e312bf01d7" spellcheck="false" class="reset-3c756112--codeBlock-75b39b81"><div class="codeLine-a3169fbc" data-key="a6a36eb4ae724e0e81282e2bbd748688"><span data-key="1ce0bb5145f342a6949b86216505b897"><span data-offset-key="1ce0bb5145f342a6949b86216505b897:0">ClassFile {</span></span></div><div class="codeLine-a3169fbc" data-key="5621b3d5c9bc4168856b2b061fd907c6"><span data-key="3a2e1de1203643fd8e39a20fafa8ea01"><span data-offset-key="3a2e1de1203643fd8e39a20fafa8ea01:0">	u4 magic; //魔数</span></span></div><div class="codeLine-a3169fbc" data-key="317e5dc6c0da4407ae2b5b5abb45b45f"><span data-key="bbdc9b8bb946429cba97a83e61905405"><span data-offset-key="bbdc9b8bb946429cba97a83e61905405:0">	u2 minor_version; //次版本号</span></span></div><div class="codeLine-a3169fbc" data-key="19765042e08d417d8ca045f654751cb2"><span data-key="6e720b9881da4fefbdfbda5bbb635ecf"><span data-offset-key="6e720b9881da4fefbdfbda5bbb635ecf:0">	u2 major_version; //主版本号</span></span></div><div class="codeLine-a3169fbc" data-key="5464a5a7705e480aa79f494ff686d722"><span data-key="b244c5d13e2f42fcbbc64f439c12dacf"><span data-offset-key="b244c5d13e2f42fcbbc64f439c12dacf:0">	u2 constant_pool_count; //常量池数</span></span></div><div class="codeLine-a3169fbc" data-key="3861e819f3764d4b9ff42ded599a0858"><span data-key="e34e8ca3eea246d7897971fd0ca938b9"><span data-offset-key="e34e8ca3eea246d7897971fd0ca938b9:0"> 	cp_info constant_pool[constant_pool_count-1]; //常量池</span></span></div><div class="codeLine-a3169fbc" data-key="b6eb9f8d20d047b985efd921bafefb9f"><span data-key="51b62a5c91394e0daa6e801e089a66c2"><span data-offset-key="51b62a5c91394e0daa6e801e089a66c2:0">	u2 access_flags; //访问标志</span></span></div><div class="codeLine-a3169fbc" data-key="a34290f3095e4529b44ee6bc2f93e72c"><span data-key="f469dd2706e54827ab2a2f299fc93525"><span data-offset-key="f469dd2706e54827ab2a2f299fc93525:0">	u2 this_class; //类名的常量池索引</span></span></div><div class="codeLine-a3169fbc" data-key="e2db2b0bf1964996860b51e3a7b69ad6"><span data-key="74ac08e2f997428a849f4d03f716fd37"><span data-offset-key="74ac08e2f997428a849f4d03f716fd37:0">	u2 super_class; //父类类名的常量池索引</span></span></div><div class="codeLine-a3169fbc" data-key="0d7908742ecc42939a2dca95f8c79d3e"><span data-key="181a41b60ac449f0a4353e96ea2d45ea"><span data-offset-key="181a41b60ac449f0a4353e96ea2d45ea:0">	u2 interfaces_count; //接口个数</span></span></div><div class="codeLine-a3169fbc" data-key="8fbc6069383a4279955eb3cc0cab4603"><span data-key="9ec1e51438b24ba0ba0cee224f123c04"><span data-offset-key="9ec1e51438b24ba0ba0cee224f123c04:0">	u2 interfaces[interfaces_count]; //接口名的常量池索引</span></span></div><div class="codeLine-a3169fbc" data-key="6680e39e6f9d452092a9aa7e0b1ad383"><span data-key="f1ef28ba4be14d19ba6ad36afd0ab9c8"><span data-offset-key="f1ef28ba4be14d19ba6ad36afd0ab9c8:0">	u2 fields_count; //字段数</span></span></div><div class="codeLine-a3169fbc" data-key="7a446a78b7214c0fb669c6c37303f9ac"><span data-key="586f18b44ac3443bbaa781137353eb81"><span data-offset-key="586f18b44ac3443bbaa781137353eb81:0">	field_info fields[fields_count]; //字段表</span></span></div><div class="codeLine-a3169fbc" data-key="23999e1eb65640e282ce26ecfae897a6"><span data-key="71459880875d443f92d2446edc8f1ce7"><span data-offset-key="71459880875d443f92d2446edc8f1ce7:0">	u2 methods_count; //方法数</span></span></div><div class="codeLine-a3169fbc" data-key="3024d49b9e134e07a74c82ecfb06eb9b"><span data-key="ecf884839be142c6bd37941218b5b072"><span data-offset-key="ecf884839be142c6bd37941218b5b072:0">	method_info methods[methods_count]; //方法表</span></span></div><div class="codeLine-a3169fbc" data-key="0e3841511d964d3e8b32386512c114f7"><span data-key="58fddd1ac3434a59a86e3ff4c8d868e2"><span data-offset-key="58fddd1ac3434a59a86e3ff4c8d868e2:0">	u2 attributes_count; //属性数</span></span></div><div class="codeLine-a3169fbc" data-key="e2a6f5d6dc0b4b00aee9f1a74dd9efea"><span data-key="86700e2a1185442ca6bff6da9910a6e5"><span data-offset-key="86700e2a1185442ca6bff6da9910a6e5:0">	attribute_info attributes[attributes_count]; //属性表</span></span></div><div class="codeLine-a3169fbc" data-key="f203150180254fa49422e5dd3f47601c"><span data-key="bfff8e0616404e6698c16ae9b05a28b5"><span data-offset-key="bfff8e0616404e6698c16ae9b05a28b5:0">}</span></span></div></pre></div><p class="blockParagraph-544a408c" data-key="bb85ab37d2e2446c86689688705dcc4c"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="c5ba514dff014ef4a62aa2520f90d4d4"><span data-offset-key="c5ba514dff014ef4a62aa2520f90d4d4:0">这次小实验的任务就是模仿 JVM 中的 classfile 解析器，正确解析一小部分 classfile 的内容并输出。</span></span></span></p><p class="blockParagraph-544a408c" data-key="63cb7f7b10f04e6aa0be1a84418bd10f"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="6671b316206b4824a955d46a51530c80"><span data-offset-key="6671b316206b4824a955d46a51530c80:0">关于 class file 的格式在JVM规范的第四章有详细解释，在这份实验说明的最后部分会向大家介绍阅读这部分手册的方法。</span></span></span></p><h1 id="2-shi-yan-yao-qiu" class="blockHeading-442b4f12--blockHeading1WithMargin-b69d755e" data-key="be61854a5f44426f89d13aa50662f62d"><div class="blockHeadingContent-756c9114"><span class="text-4505230f--HeadingH700-04e1a2a3--textContentFamily-49a318e1"><span data-key="3a557d45610d4ccca140498430fb0628"><span data-offset-key="3a557d45610d4ccca140498430fb0628:0">2. 实验要求</span></span></span><a href="#2-shi-yan-yao-qiu" contenteditable="false" class="blockHeadingAnchor-34f75d78--blockHeadingAnchorHidden-d69b5eda"><span class="blockHeadingAnchorIcon-1c2bf3cb"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" class="icon-7f6730be--text-3f89f380"><g><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></g></svg></span></a></div><div role="button" tabindex="0" style="color:#6BB6B6" contenteditable="false" class="reset-3c756112--blockHeadingUp-c32402b2"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" class="icon-7f6730be--text-3f89f380"><g><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></g></svg></div></h1><h2 id="21-shi-yan-shu-ru" class="blockHeading-442b4f12--blockHeading2WithMargin-532d771d" data-key="4a5d0a208bfa469d89f35a4b85751c26"><div class="blockHeadingContent-756c9114"><span class="text-4505230f--HeadingH600-23f228db--textContentFamily-49a318e1"><span data-key="9e1f47f2322245218ecd2336d5c66b42"><span data-offset-key="9e1f47f2322245218ecd2336d5c66b42:0">2.1 实验输入</span></span></span><a href="#21-shi-yan-shu-ru" contenteditable="false" class="blockHeadingAnchor-34f75d78--blockHeadingAnchorHidden-d69b5eda"><span class="blockHeadingAnchorIcon-1c2bf3cb"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" class="icon-7f6730be--text-3f89f380"><g><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></g></svg></span></a></div></h2><p class="blockParagraph-544a408c" data-key="3d7e8dfda73f43c7a9c193839d9f4238"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="5a69aee03b6749028932e20019ccec77"><span data-offset-key="5a69aee03b6749028932e20019ccec77:0">测试用例中的流程大致如下(这里进行了简化，不是真正的代码)</span></span></span></p><div class="reset-3c756112--codeBlockWrapper-56f27afc"><div contenteditable="false" class="reset-3c756112--copyButtonWrapper-ca591f6e"><div aria-label="Copy" role="button" tabindex="0" class="reset-3c756112--touchableView-a079aa82--copyButton-4f9a9412--tooltipped-57ae51fe"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" class="icon-7f6730be--text-3f89f380"><g><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></g></svg></div></div><pre data-key="404e2c0b6f234ba4b234dfe144337915" spellcheck="false" class="reset-3c756112--codeBlock-75b39b81"><div class="codeLine-a3169fbc" data-key="38aecd6a88e14540b16b6a3787967d09"><span data-key="6b6a837340674c25b78fb855c2f53239"><span data-offset-key="6b6a837340674c25b78fb855c2f53239:0">byte[] content = ClassFileReader.readClassFile(className);</span></span></div><div class="codeLine-a3169fbc" data-key="2aa4b4fe34b14d6389e6e488f0636f13"><span data-key="209f026bf4f84583bb5d069332263532"><span data-offset-key="209f026bf4f84583bb5d069332263532:0">ClassFile classfile = new ClassFile(content);</span></span></div><div class="codeLine-a3169fbc" data-key="c861fbbcc344429e8a1f1958ce48364f"><span data-key="1562b8466a414b3881175e0ba74507a3"><span data-offset-key="1562b8466a414b3881175e0ba74507a3:0"><span data-slate-zero-width="n">​</span></span></span></div><div class="codeLine-a3169fbc" data-key="ef0ff702d9034264b2a810f680095023"><span data-key="d37fccae28ba424bae709426b82e2612"><span data-offset-key="d37fccae28ba424bae709426b82e2612:0">\\进行assert测试</span></span></div><div class="codeLine-a3169fbc" data-key="dc9ed44bc3a8475f9a6762b6e577b3c5"><span data-key="465f4b016d99427da1f3d46ac432f1e9"><span data-offset-key="465f4b016d99427da1f3d46ac432f1e9:0">assertEquals(expected,real);</span></span></div><div class="codeLine-a3169fbc" data-key="e32c0f11943646449575d11d94ebae90"><span data-key="e68771f316294eba939eba6d3146de4e"><span data-offset-key="e68771f316294eba939eba6d3146de4e:0">...</span></span></div><div class="codeLine-a3169fbc" data-key="598982da7b6141fc81e500352ebc8433"><span data-key="8876e4110056484a81d6c2e6634409b8"><span data-offset-key="8876e4110056484a81d6c2e6634409b8:0"><span data-slate-zero-width="n">​</span></span></span></div><div class="codeLine-a3169fbc" data-key="3a39bbf8572f4a0390c0bdba9029c97a"><span data-key="e613e17ae5ae4284ab559da2a752de3d"><span data-offset-key="e613e17ae5ae4284ab559da2a752de3d:0">JClass clazz = new JClass(classfile);</span></span></div><div class="codeLine-a3169fbc" data-key="aed6c19bf3f74712923ca4c056db52dd"><span data-key="8d1184a95a214ba28e0b9ec942e989fe"><span data-offset-key="8d1184a95a214ba28e0b9ec942e989fe:0">\\进行assert测试</span></span></div><div class="codeLine-a3169fbc" data-key="2154e01ab7b4473195b84950ea1d3503"><span data-key="b6ea8dfdc1f2467a8c8e2bec223c3da4"><span data-offset-key="b6ea8dfdc1f2467a8c8e2bec223c3da4:0">assertEquals(expected,real);</span></span></div><div class="codeLine-a3169fbc" data-key="21e128a458214f50b3d2e118d29c58f9"><span data-key="59bfe4401c4c4fbe85ca2bb0f179585a"><span data-offset-key="59bfe4401c4c4fbe85ca2bb0f179585a:0">...</span></span></div></pre></div><p class="blockParagraph-544a408c" data-key="9dfe58f289f348b5b24cada2d5d970ab"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="254c13578c4445449e9093adc1e8214d"><span data-offset-key="254c13578c4445449e9093adc1e8214d:0">我们利用了上一次作业中实现的ClassFileReader读取到了对应的文件并转换成了byte数组的形式。我们已经保证了读取文件的正确。</span></span></span></p><p class="blockParagraph-544a408c" data-key="68e31dd2c34c46d4bd97be9d581d370b"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="9f6ee0e96ae444918dfd9052fd82c56c"><span data-offset-key="9f6ee0e96ae444918dfd9052fd82c56c:0">从上面的代码中可以看出，我们有两个主要的类，ClassFile和JClass。实验中只需要保证这两个构造器不被修改即可。同时，这两个类中已有的以get开头的方法请不要随意删除，因为测试需要调用它们。</span></span></span></p><div class="reset-3c756112--codeBlockWrapper-56f27afc"><div contenteditable="false" class="reset-3c756112--copyButtonWrapper-ca591f6e"><div aria-label="Copy" role="button" tabindex="0" class="reset-3c756112--touchableView-a079aa82--copyButton-4f9a9412--tooltipped-57ae51fe"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" class="icon-7f6730be--text-3f89f380"><g><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></g></svg></div></div><pre data-key="20a870bb472a4cb4818fa2fec705bf0a" spellcheck="false" class="reset-3c756112--codeBlock-75b39b81"><div class="codeLine-a3169fbc" data-key="75962e9f47444b2b93d0dcbc8757eead"><span data-key="3f26a574e68a431d9f5b7db6fb7361d7"><span data-offset-key="3f26a574e68a431d9f5b7db6fb7361d7:0">public ClassFile(byte[] classfile) {...}</span></span></div><div class="codeLine-a3169fbc" data-key="2c6ed5ed075d4041968b42ce31e16986"><span data-key="f5f55350db674074b18abd9b0cb042b5"><span data-offset-key="f5f55350db674074b18abd9b0cb042b5:0">public JClass(ClassFile classFile) {...}</span></span></div></pre></div><h2 id="22-shi-yan-shu-chu" class="blockHeading-442b4f12--blockHeading2WithMargin-532d771d" data-key="ba819adb07cb4c7798730e24b6e3396f"><div class="blockHeadingContent-756c9114"><span class="text-4505230f--HeadingH600-23f228db--textContentFamily-49a318e1"><span data-key="1bc4ac8be1d44cb3baf84845c57d5376"><span data-offset-key="1bc4ac8be1d44cb3baf84845c57d5376:0">2.2 实验输出</span></span></span><a href="#22-shi-yan-shu-chu" contenteditable="false" class="blockHeadingAnchor-34f75d78--blockHeadingAnchorHidden-d69b5eda"><span class="blockHeadingAnchorIcon-1c2bf3cb"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" class="icon-7f6730be--text-3f89f380"><g><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></g></svg></span></a></div></h2><p class="blockParagraph-544a408c" data-key="66a37591528842cea0440248a0d5d1eb"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="ea09b9f08aca4ea7b04d3be916668eff"><span data-offset-key="ea09b9f08aca4ea7b04d3be916668eff:0">在实验中你的一部分工作是完成这两个构造方法中缺失的部分。我们会调用classFile和clazz这两个变量的getXXX方法进行assert测试。整个测试过程中不会接收任何异常，这意味着你需要catch掉所有可能的异常。</span></span></span></p><h2 id="23-shi-yan-yao-qiu" class="blockHeading-442b4f12--blockHeading2WithMargin-532d771d" data-key="aec828abd2704eae8b9df757ceaa1095"><div class="blockHeadingContent-756c9114"><span class="text-4505230f--HeadingH600-23f228db--textContentFamily-49a318e1"><span data-key="c78d65a4653745319e8a694ecb8aff42"><span data-offset-key="c78d65a4653745319e8a694ecb8aff42:0">2.3 实验要求</span></span></span><a href="#23-shi-yan-yao-qiu" contenteditable="false" class="blockHeadingAnchor-34f75d78--blockHeadingAnchorHidden-d69b5eda"><span class="blockHeadingAnchorIcon-1c2bf3cb"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" class="icon-7f6730be--text-3f89f380"><g><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></g></svg></span></a></div></h2><p class="blockParagraph-544a408c" data-key="fe833c108fa94c7da35781a9a215d30f"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="becff3aed62b4401b4975a2e79d879a5"><span data-offset-key="becff3aed62b4401b4975a2e79d879a5:0">本次的实验要求较为分散，在代码中我们使用了 &quot;//todo&quot; 这样的注释对你需要完成的部分进行了标记，并且在缺失代码的地方使用了&quot;/**...Add some codes here.*/&quot;如果你是IDEA用户你可以使用左下角的todo按钮来查看所有的要求。你也可以进行全文搜索todo或&quot;Add some codes here&quot;字符串完成这项任务。</span></span></span></p><ol class="list-20526648" data-key="d1d3c203ac43439fa253702c23700105"><li class=""><div data-key="21ac58d3fa13404ab3a0990c9e5573bc" class="reset-3c756112--listItemContent-756c9114"><p class="blockParagraph-544a408c--noMargin-acdf7afa" data-key="3c333d7e4f5e41409d7ff711afcec53b"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="3096d8bffa054fe0b53f6d9bf48b3ec2"><span data-offset-key="3096d8bffa054fe0b53f6d9bf48b3ec2:0">完成ClassFile和JClass构造器中缺失的部分</span></span></span></p></div></li><li class=""><div data-key="f847d0ea457f48ebb16081c2bea977de" class="reset-3c756112--listItemContent-756c9114"><p class="blockParagraph-544a408c--noMargin-acdf7afa" data-key="635d39c2df394861804369ee51c7013f"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="3e91db6568fc49cc81e126157c0ce1c0"><span data-offset-key="3e91db6568fc49cc81e126157c0ce1c0:0">完成ConstantPoolInfo类中的getConstantPoolInfo方法，你需要补全ClassInfo和UTF8Info的实现并且别忘了在getConstantPoolInfo中对它们进行使用</span></span></span></p></div></li><li class=""><div data-key="5aea80a5968f4a5ca6f7d5ca1e15aa8b" class="reset-3c756112--listItemContent-756c9114"><p class="blockParagraph-544a408c--noMargin-acdf7afa" data-key="5b39b40a0ec3466f9f34a5c1c18bbad5"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="4cbcdfd443f948f1a70dd0cfc3931c83"><span data-offset-key="4cbcdfd443f948f1a70dd0cfc3931c83:0">完成Field构造器中的代码</span></span></span></p></div></li><li class=""><div data-key="8cdeb75bdab84c55933d6ced3edcd57d" class="reset-3c756112--listItemContent-756c9114"><p class="blockParagraph-544a408c--noMargin-acdf7afa" data-key="6d3b6c7e5ded4a4ba9ae4d104781af12"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="45a91f73dbbc464cb0a3fe10bc39d232"><span data-offset-key="45a91f73dbbc464cb0a3fe10bc39d232:0">完成Method类中的计算argc的方法（calculateArgcFromDescriptor）</span></span></span></p></div></li></ol><p class="blockParagraph-544a408c" data-key="6535eaf0f5a946ada3e285435c9ce379"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="c281d52a638d4a02a604204c18793a9d"><span data-offset-key="c281d52a638d4a02a604204c18793a9d:0"><strong class="bold-3c254bd9" data-slate-leaf="true">需要额外注意：请不要移动已经存在的类，对包结构的改变可能会带来不确定的行为，多数情况下你会面临依赖问题</strong></span></span></span></p><h2 id="24-dai-ma-zhi-dao" class="blockHeading-442b4f12--blockHeading2WithMargin-532d771d" data-key="8363cc7aefb043eaaf1f81c441bc9ff1"><div class="blockHeadingContent-756c9114"><span class="text-4505230f--HeadingH600-23f228db--textContentFamily-49a318e1"><span data-key="e5e53e17fbb848759bc86ddaffe68328"><span data-offset-key="e5e53e17fbb848759bc86ddaffe68328:0">2.4 代码指导</span></span></span><a href="#24-dai-ma-zhi-dao" contenteditable="false" class="blockHeadingAnchor-34f75d78--blockHeadingAnchorHidden-d69b5eda"><span class="blockHeadingAnchorIcon-1c2bf3cb"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" class="icon-7f6730be--text-3f89f380"><g><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></g></svg></span></a></div></h2><p class="blockParagraph-544a408c" data-key="e73157a9fdb74f03ab4e1239c058d5af"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="4de4bc6571fa498199f68206997b1abe"><span data-offset-key="4de4bc6571fa498199f68206997b1abe:0">在这次的代码中我们已经删去了一些可能会影响你阅读源码的部分，例如对属性表的解析，你将在真正的大作业框架中见到它。</span></span></span></p><h3 id="wan-cheng-yao-qiu-1" class="blockHeading-442b4f12--blockHeading3WithMargin-532d7700" data-key="b267f03bee504004a72812769eaf852e"><div class="blockHeadingContent-756c9114"><span class="text-4505230f--HeadingH400-686c0942--textContentFamily-49a318e1"><span data-key="441e7e4b5d254006978c47bb33d58871"><span data-offset-key="441e7e4b5d254006978c47bb33d58871:0">完成要求1:</span></span></span><a href="#wan-cheng-yao-qiu-1" contenteditable="false" class="blockHeadingAnchor-34f75d78--blockHeadingAnchorHidden-d69b5eda"><span class="blockHeadingAnchorIcon-1c2bf3cb"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" class="icon-7f6730be--text-3f89f380"><g><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></g></svg></span></a></div></h3><p class="blockParagraph-544a408c" data-key="c75bddb82155471fa834be5b6a4f1028"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="c8bc30287d104a4298e403849a6bcf9d"><span data-offset-key="c8bc30287d104a4298e403849a6bcf9d:0"> 你需要仔细阅读手册中的class file规范，对于如何处理byte数组我们在相应的构造器代码中已经有一些实现作为参考。一个debug技巧：在ClassFile的构造器代码中我们故意留出了“this.accessFlags = in.getShort();”这条语句。在这条语句之前你需要正确完成常量池部分的代码。你可以将断点打在accessFlags的下一条语句，如果你正确完成了，在执行到断点时，accessFlag的值应该与你通过javap获得的结果是一致的。</span></span></span></p><p class="blockParagraph-544a408c" data-key="601cf5233ccc4f5c9745d4b17601459e"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="987386c182b74d188283abe68164abd4"><span data-offset-key="987386c182b74d188283abe68164abd4:0">例如在正确实现的版本中，java/lang/Object的accessFlags为0x21(IDEA中使用右键see as hex)，查阅手册</span></span><a class="link-a079aa82--primary-53a25e66--link-faf6c434" style="color:#6BB6B6" href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.1" target="_blank" rel="noopener noreferrer" data-key="7834b2dbbe354c2d83398de9efe72f86"><span data-key="68659a6b5cff48678089688635d9e29d"><span data-offset-key="68659a6b5cff48678089688635d9e29d:0">4.1节</span></span></a><span data-key="ffb4d1736dfc4d71abe89b742b2ec67b"><span data-offset-key="ffb4d1736dfc4d71abe89b742b2ec67b:0">可以知道0x21是0x01+0x20，即PUBLIC+SUPER。和javap的结果一致。</span></span></span></p><div data-slate-void="true" data-key="518f7d7564034ee4afc783b2c459e38a"><div><figure data-key="518f7d7564034ee4afc783b2c459e38a" contenteditable="false" class="reset-3c756112--figure-c0d4b308"><div class="reset-3c756112--figureAlignCenter-2d9bf702"><div class="reset-3c756112--figureLayer-b6ab7c94"><img tabindex="0" src="https://gblobscdn.gitbook.com/assets%2F-M7HTVnrQXURnsIjLi0Q%2F-M7cxqzFETlQeISut1nH%2F-M7d1d37IHpSmUYApFbD%2F7L%25%40%60TMN9SN%5DY%7DM%24%24ZUL6QI.png?alt=media&amp;token=99d6e74b-21b4-4b04-9772-8745cb181564" class="image-52799b3c" style="cursor:zoom-in"/></div></div><div class="reset-3c756112--figureAlignCenter-2d9bf702"></div></figure></div></div><p class="blockParagraph-544a408c" data-key="b2067895981a4f8fb63450070e4097e1"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="2a658ef178be48b4a90184c051e63d2e"><span data-offset-key="2a658ef178be48b4a90184c051e63d2e:0">在完成了这一步的验证之后再继续编码会让你的信心增强很多~</span></span></span></p><h3 id="wan-cheng-yao-qiu-2" class="blockHeading-442b4f12--blockHeading3WithMargin-532d7700" data-key="8e47b23176a945b0b12986080e163718"><div class="blockHeadingContent-756c9114"><span class="text-4505230f--HeadingH400-686c0942--textContentFamily-49a318e1"><span data-key="5962470b626f47ccb50f2b22f5c7c059"><span data-offset-key="5962470b626f47ccb50f2b22f5c7c059:0">完成要求2：</span></span></span><a href="#wan-cheng-yao-qiu-2" contenteditable="false" class="blockHeadingAnchor-34f75d78--blockHeadingAnchorHidden-d69b5eda"><span class="blockHeadingAnchorIcon-1c2bf3cb"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" class="icon-7f6730be--text-3f89f380"><g><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></g></svg></span></a></div></h3><div style="border-color:#3884FF" data-key="433407c54a0647c2b7759204d9295684" class="reset-3c756112--blockHint-a7403a60"><div class="reset-3c756112--hintIcon-7c7981dd--paragraph-ae3112d0"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" stroke="none" style="color:#3884FF" class="icon-7f6730be--text-3f89f380"><g><path d="M12.2 8.98c.06-.01.12-.03.18-.06.06-.02.12-.05.18-.09l.15-.12c.18-.19.29-.45.29-.71 0-.06-.01-.13-.02-.19a.603.603 0 0 0-.06-.19.757.757 0 0 0-.09-.18c-.03-.05-.08-.1-.12-.15-.28-.27-.72-.37-1.09-.21-.13.05-.23.12-.33.21-.04.05-.09.1-.12.15-.04.06-.07.12-.09.18-.03.06-.05.12-.06.19-.01.06-.02.13-.02.19 0 .26.11.52.29.71.1.09.2.16.33.21.12.05.25.08.38.08.06 0 .13-.01.2-.02M13 16v-4a1 1 0 1 0-2 0v4a1 1 0 1 0 2 0M12 3c-4.962 0-9 4.038-9 9 0 4.963 4.038 9 9 9 4.963 0 9-4.037 9-9 0-4.962-4.037-9-9-9m0 20C5.935 23 1 18.065 1 12S5.935 1 12 1c6.066 0 11 4.935 11 11s-4.934 11-11 11" fill-rule="evenodd"></path></g></svg></div><p class="blockParagraph-544a408c" data-key="3f5e26e0e7b54d2488971fe35893e8be"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="4d1607261cf646b1a22d9891d807fcab"><span data-offset-key="4d1607261cf646b1a22d9891d807fcab:0">在开始实现这个要求之前，你应该已经读过文档中关于常量池的部分。弄清楚每一种常量池中的Info应该是什么样的结构，里面的常量池索引是一个什么概念。</span></span></span></p></div><p class="blockParagraph-544a408c" data-key="4216b95ba82f402483b018d37ff0bf3b"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="af9e1d902ebc42418818652e992914e0"><span data-offset-key="af9e1d902ebc42418818652e992914e0:0">在ConstantPoolInfo类中，你需要完成ClassInfo与UTF8Info。其中ClassInfo相对好实现一点，但无法在UTF8Info完成之前真正完整地实现它。</span></span></span></p><p class="blockParagraph-544a408c" data-key="923602cf7c6543538f4c098e57eb995a"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="b332b1c4056a46b78dd5c88a17fc516b"><span data-offset-key="b332b1c4056a46b78dd5c88a17fc516b:0">ClassInfo中的getClassName方法是返回类名，而所有类名都被放在了一个UTF8Info中。</span></span></span></p><p class="blockParagraph-544a408c" data-key="3b8cc5423455422995a0f2ad00e50286"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="fd20c2adbf184022b109f9d85c491c08"><span data-offset-key="fd20c2adbf184022b109f9d85c491c08:0">我们故意将这两个类中的所有成员都删除了，目的是让你必须去查阅手册找到这两个结构中到底有什么。你可以轻松的在</span></span><a class="link-a079aa82--primary-53a25e66--link-faf6c434" style="color:#6BB6B6" href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4" target="_blank" rel="noopener noreferrer" data-key="cb9c641f5b9f4d3d8d36d1631ab62d00"><span data-key="d6755e9c528f4b4485fc684c7f1edf3c"><span data-offset-key="d6755e9c528f4b4485fc684c7f1edf3c:0">4.4节</span></span></a><span data-key="bcdc7cde60fe40eea09131844b04a357"><span data-offset-key="bcdc7cde60fe40eea09131844b04a357:0">找到答案。具体的实现我们留出了其他的Info的具体实现，可以对照其中的内容进行实现。</span><span data-offset-key="bcdc7cde60fe40eea09131844b04a357:1"><strong class="bold-3c254bd9" data-slate-leaf="true">这些类仅仅是留给你作为参考的，不需要修改任何代码，不用被吓到~ </strong></span></span></span></p><p class="blockParagraph-544a408c" data-key="f7d6a47af50748bcb55c77855e94c162"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="cd10da2053954691a149a04fb5315d51"><span data-offset-key="cd10da2053954691a149a04fb5315d51:0">在UTF8Info的实现中较为困难的一点是，string的长度并不是固定不变的，因此对于getConstantPoolInfo方法中的bytesRead变量来说是无法直接增加一个默认值的。你可以有很多种方法来提供这个信息。</span></span></span></p><h3 id="wan-cheng-yao-qiu-3" class="blockHeading-442b4f12--blockHeading3WithMargin-532d7700" data-key="c6b158ba29e342e1b76ea99acb98b4e7"><div class="blockHeadingContent-756c9114"><span class="text-4505230f--HeadingH400-686c0942--textContentFamily-49a318e1"><span data-key="7c5c5e17807a4f319355667e9778c574"><span data-offset-key="7c5c5e17807a4f319355667e9778c574:0">完成要求3：</span></span></span><a href="#wan-cheng-yao-qiu-3" contenteditable="false" class="blockHeadingAnchor-34f75d78--blockHeadingAnchorHidden-d69b5eda"><span class="blockHeadingAnchorIcon-1c2bf3cb"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" class="icon-7f6730be--text-3f89f380"><g><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></g></svg></span></a></div></h3><p class="blockParagraph-544a408c" data-key="03128d4f939240b290bc565bfd444d79"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="6ece0d86c72143deb9efd1636ba50a28"><span data-offset-key="6ece0d86c72143deb9efd1636ba50a28:0">到这里我们进入了完成JClass的阶段，Field与Method十分类似，参考Method的实现你就可以轻松的完成Field的实现。这个要求只是希望你可以熟悉一下Method和Field中具体有哪些内容。</span></span></span></p><h3 id="wan-cheng-yao-qiu-4" class="blockHeading-442b4f12--blockHeading3WithMargin-532d7700" data-key="fbd49703124248e6921d7786408a83cd"><div class="blockHeadingContent-756c9114"><span class="text-4505230f--HeadingH400-686c0942--textContentFamily-49a318e1"><span data-key="158272688d2f414abda84a5532ecb877"><span data-offset-key="158272688d2f414abda84a5532ecb877:0">完成要求4：</span></span></span><a href="#wan-cheng-yao-qiu-4" contenteditable="false" class="blockHeadingAnchor-34f75d78--blockHeadingAnchorHidden-d69b5eda"><span class="blockHeadingAnchorIcon-1c2bf3cb"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" class="icon-7f6730be--text-3f89f380"><g><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></g></svg></span></a></div></h3><p class="blockParagraph-544a408c" data-key="2f410e45a431460897b5ec64fb97fbb5"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="f50e4a38100e4978b2984590bfd4643d"><span data-offset-key="f50e4a38100e4978b2984590bfd4643d:0">首先要完成这部分的内容你需要阅读手册</span></span><a class="link-a079aa82--primary-53a25e66--link-faf6c434" style="color:#6BB6B6" href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.3" target="_blank" rel="noopener noreferrer" data-key="d2666224cbd64b9ab59795e7de8d6a76"><span data-key="81c1550b69204eb59be020ac5f0b50a5"><span data-offset-key="81c1550b69204eb59be020ac5f0b50a5:0">4.3.3</span></span></a><span data-key="88c3bd9ed4a547e099c02b440c82e140"><span data-offset-key="88c3bd9ed4a547e099c02b440c82e140:0">部分，规范中规定了方法的描述符具有如</span><span data-offset-key="88c3bd9ed4a547e099c02b440c82e140:1"><code spellcheck="false" class="code-81e98f88" data-slate-leaf="true">({ParameterDescriptor} ) ReturnDescriptor</code></span><span data-offset-key="88c3bd9ed4a547e099c02b440c82e140:2"> 的形式，我们对官方给出的例子稍加修改</span></span></span></p><div class="reset-3c756112--codeBlockWrapper-56f27afc"><div contenteditable="false" class="reset-3c756112--copyButtonWrapper-ca591f6e"><div aria-label="Copy" role="button" tabindex="0" class="reset-3c756112--touchableView-a079aa82--copyButton-4f9a9412--tooltipped-57ae51fe"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" class="icon-7f6730be--text-3f89f380"><g><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></g></svg></div></div><pre data-key="0ff356ed78c643c3b0fdc6bc22aa42bd" spellcheck="false" class="reset-3c756112--codeBlock-75b39b81"><div class="codeLine-a3169fbc" data-key="a4776561bab845d6a9498ea4a26beaad"><span data-key="251445eb3d7d48a0bd9c6f5e2804a8f1"><span data-offset-key="251445eb3d7d48a0bd9c6f5e2804a8f1:0">Object m(int[] i, double d, Thread t) {...}</span></span></div><div class="codeLine-a3169fbc" data-key="2eec36643ea647be9b8c032259b0e5da"><span data-key="22d5d5ba8d3749d7a332f903cf5f5a44"><span data-offset-key="22d5d5ba8d3749d7a332f903cf5f5a44:0"><span data-slate-zero-width="n">​</span></span></span></div><div class="codeLine-a3169fbc" data-key="88a88fd1e06e4011ac12f2e4da59e5f0"><span data-key="d043e721348e4521bf5aeb036c5db2cb"><span data-offset-key="d043e721348e4521bf5aeb036c5db2cb:0">([IDLjava/lang/Thread;)Ljava/lang/Object;</span></span></div></pre></div><p class="blockParagraph-544a408c" data-key="5223527156864b1b806d83dfd7c08587"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="d72ec4d88c6f4f1bb6617c71c7043d09"><span data-offset-key="d72ec4d88c6f4f1bb6617c71c7043d09:0">方法m的返回值是Object类，它接收三个参数，参数的类型分别为int[]、double、Thread类。在JVM中有一些基本的类型，分别为BCDFIJSZ，以及数组类型[，其余的则是以L开头以分号结尾的类类型。在描述符中，会按照源码中的顺序排列对应的简写表达，例如[I对应int[]，D对应double，Ljava/lang/Thread;对应Thread类。</span></span></span></p><p class="blockParagraph-544a408c" data-key="d34bec50c90644b78c8fe03f73ea2452"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="8ccda4d8ecaa43a5a75e1ce2dbea0821"><span data-offset-key="8ccda4d8ecaa43a5a75e1ce2dbea0821:0">要进行argc计算，argc在这里的含义代表着方法中的参数占据的空间，除了J(long)和D(double)占据两个空间，其余都占据一个空间。如果要对上面这个进行argc的计算，</span><span data-offset-key="8ccda4d8ecaa43a5a75e1ce2dbea0821:1"><strong class="bold-3c254bd9" data-slate-leaf="true">你将会得到的结果是4，而不是3。</strong></span><span data-offset-key="8ccda4d8ecaa43a5a75e1ce2dbea0821:2">在你的代码实现中也需要注意这一点。</span></span></span></p><p class="blockParagraph-544a408c" data-key="c6a720cc08a44295b00d730671dcb62a"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="e98681adf368454281b93aeb2eae0782"><span data-offset-key="e98681adf368454281b93aeb2eae0782:0"><strong class="bold-3c254bd9" data-slate-leaf="true">除此之外，你需要注意数组的表达含义</strong></span><span data-offset-key="e98681adf368454281b93aeb2eae0782:1">，数组符号[本身不能够被计算进argc中，因为数组符号必须和一个非数组符号结合才有实际的意义，这个非数组符号必须出现在1或多个数组符号的右边。即使是[[[[[[[Ljava/lang/String;这样的表示，它也只能够被当成一个多维的String数组，被计算成1。并且在数组的表示中它不会被中断，从遇到第一个数组符号[开始到遇到一个非数组符号结束，这中间绝对不会有非数组符号出现，否则就会被认为是两个/多个数组。</span></span></span></p><div style="border-color:#3884FF" data-key="1e7ed3447fe14e3aaed8a781460067ad" class="reset-3c756112--blockHint-a7403a60"><div class="reset-3c756112--hintIcon-7c7981dd--paragraph-ae3112d0"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" stroke="none" style="color:#3884FF" class="icon-7f6730be--text-3f89f380"><g><path d="M12.2 8.98c.06-.01.12-.03.18-.06.06-.02.12-.05.18-.09l.15-.12c.18-.19.29-.45.29-.71 0-.06-.01-.13-.02-.19a.603.603 0 0 0-.06-.19.757.757 0 0 0-.09-.18c-.03-.05-.08-.1-.12-.15-.28-.27-.72-.37-1.09-.21-.13.05-.23.12-.33.21-.04.05-.09.1-.12.15-.04.06-.07.12-.09.18-.03.06-.05.12-.06.19-.01.06-.02.13-.02.19 0 .26.11.52.29.71.1.09.2.16.33.21.12.05.25.08.38.08.06 0 .13-.01.2-.02M13 16v-4a1 1 0 1 0-2 0v4a1 1 0 1 0 2 0M12 3c-4.962 0-9 4.038-9 9 0 4.963 4.038 9 9 9 4.963 0 9-4.037 9-9 0-4.962-4.037-9-9-9m0 20C5.935 23 1 18.065 1 12S5.935 1 12 1c6.066 0 11 4.935 11 11s-4.934 11-11 11" fill-rule="evenodd"></path></g></svg></div><p class="blockParagraph-544a408c" data-key="ddf0dd8678f24df38f2d95a1232db70d"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="ae46ad83bab9428fb12bc963b76133d6"><span data-offset-key="ae46ad83bab9428fb12bc963b76133d6:0">在实现方法时如果出现多个if-else，请将它转换成switch或者表驱动(表驱动这里没必要)。主要的理由是多个if-else不仅在可读性上有很大的问题，并且会带来一定的性能影响。在后续的实验中，你会理解这两者在字节码层次上的区别。</span></span></span></p></div><h1 id="3-shou-ce-jian-jie-lai-zi-xxz-zhu-jiao" class="blockHeading-442b4f12--blockHeading1WithMargin-b69d755e" data-key="018e5c72828e4d12a41e62a037988322"><div class="blockHeadingContent-756c9114"><span class="text-4505230f--HeadingH700-04e1a2a3--textContentFamily-49a318e1"><span data-key="3aa6841295e34c0ca33e765a91173b1c"><span data-offset-key="3aa6841295e34c0ca33e765a91173b1c:0">3. 手册简介（来自xxz助教）</span></span></span><a href="#3-shou-ce-jian-jie-lai-zi-xxz-zhu-jiao" contenteditable="false" class="blockHeadingAnchor-34f75d78--blockHeadingAnchorHidden-d69b5eda"><span class="blockHeadingAnchorIcon-1c2bf3cb"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" class="icon-7f6730be--text-3f89f380"><g><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></g></svg></span></a></div><div role="button" tabindex="0" style="color:#6BB6B6" contenteditable="false" class="reset-3c756112--blockHeadingUp-c32402b2"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" class="icon-7f6730be--text-3f89f380"><g><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></g></svg></div></h1><p class="blockParagraph-544a408c" data-key="ac5573bce40f4d8c914d6f5e4faa51f7"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="14805832f3ed4627af6d132edc233598"><span data-offset-key="14805832f3ed4627af6d132edc233598:0">对于本实验有帮助的部分集中在手册的 4.1-4.7 节，其它内容有兴趣的同学可以自行阅读探索。</span></span></span></p><p class="blockParagraph-544a408c" data-key="78a6145a63db431480c83e4bbb3a2726"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="adfbbf067edc45fb91d01697bc20a260"><span data-offset-key="adfbbf067edc45fb91d01697bc20a260:0">4.1 是对 classfile 整体结构的简介和说明 4.2 可以跳过 4.3 是对“类型描述符”组织形式的说明，其中 4.3.2 用到的表示方式是“上下文无关文法(Context Free Grammar)”, 有兴趣的同学可以自行进一步了解（欢迎选修“计算理论初步”）。</span></span></span></p><p class="blockParagraph-544a408c" data-key="b26c4fda9d8340d68ce2968c58591f22"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="e41dc349c04043feb30e3f56c6cac725"><span data-offset-key="e41dc349c04043feb30e3f56c6cac725:0">在这里简单介绍一下它描述的意思： Descriptor 可以是 BaseType, ObjectType, ArrayType 的一种， 如果是 BaseType，它一定是 BCDFIJSZ 中的一个字母； 如果是 ObjectType，它是</span><span data-offset-key="e41dc349c04043feb30e3f56c6cac725:1"><code spellcheck="false" class="code-81e98f88" data-slate-leaf="true">L&lt;类名&gt;;</code></span><span data-offset-key="e41dc349c04043feb30e3f56c6cac725:2"> ; 如果是 ArrayType，它是</span><span data-offset-key="e41dc349c04043feb30e3f56c6cac725:3"><code spellcheck="false" class="code-81e98f88" data-slate-leaf="true">[&lt;成员描述符&gt;</code></span><span data-offset-key="e41dc349c04043feb30e3f56c6cac725:4">，其中成员描述符又是一个 Descriptor，可以是 BaseType, ObjectType, ArrayType 的一种……</span></span></span></p><p class="blockParagraph-544a408c" data-key="a9fbb3b9fe8749b0b03c41f92751873b"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="95b63abab0584f2ab84aec21a0a85f8a"><span data-offset-key="95b63abab0584f2ab84aec21a0a85f8a:0">例如，二维</span><span data-offset-key="95b63abab0584f2ab84aec21a0a85f8a:1"><code spellcheck="false" class="code-81e98f88" data-slate-leaf="true">int</code></span><span data-offset-key="95b63abab0584f2ab84aec21a0a85f8a:2">数组可以这样表示： 首先它是一个数组，数组的成员是一维</span><span data-offset-key="95b63abab0584f2ab84aec21a0a85f8a:3"><code spellcheck="false" class="code-81e98f88" data-slate-leaf="true">int</code></span><span data-offset-key="95b63abab0584f2ab84aec21a0a85f8a:4">数组， 所以描述符是</span><span data-offset-key="95b63abab0584f2ab84aec21a0a85f8a:5"><code spellcheck="false" class="code-81e98f88" data-slate-leaf="true">[&lt;一维int数组描述符&gt;</code></span><span data-offset-key="95b63abab0584f2ab84aec21a0a85f8a:6">； 而一维</span><span data-offset-key="95b63abab0584f2ab84aec21a0a85f8a:7"><code spellcheck="false" class="code-81e98f88" data-slate-leaf="true">int</code></span><span data-offset-key="95b63abab0584f2ab84aec21a0a85f8a:8">数组也是一个数组，它的成员是</span><span data-offset-key="95b63abab0584f2ab84aec21a0a85f8a:9"><code spellcheck="false" class="code-81e98f88" data-slate-leaf="true">int</code></span><span data-offset-key="95b63abab0584f2ab84aec21a0a85f8a:10">, 所以可以将上述描述符展开成</span><span data-offset-key="95b63abab0584f2ab84aec21a0a85f8a:11"><code spellcheck="false" class="code-81e98f88" data-slate-leaf="true">[[&lt;int描述符&gt;</code></span><span data-offset-key="95b63abab0584f2ab84aec21a0a85f8a:12">； 而</span><span data-offset-key="95b63abab0584f2ab84aec21a0a85f8a:13"><code spellcheck="false" class="code-81e98f88" data-slate-leaf="true">int</code></span><span data-offset-key="95b63abab0584f2ab84aec21a0a85f8a:14">是一个基本类型，它的描述符是 BaseType 中的 I， 所以展开为</span><span data-offset-key="95b63abab0584f2ab84aec21a0a85f8a:15"><code spellcheck="false" class="code-81e98f88" data-slate-leaf="true">[[I</code></span><span data-offset-key="95b63abab0584f2ab84aec21a0a85f8a:16">，至此，没有再能展开的描述符了， 于是得到二维</span><span data-offset-key="95b63abab0584f2ab84aec21a0a85f8a:17"><code spellcheck="false" class="code-81e98f88" data-slate-leaf="true">int</code></span><span data-offset-key="95b63abab0584f2ab84aec21a0a85f8a:18">数组描述符为</span><span data-offset-key="95b63abab0584f2ab84aec21a0a85f8a:19"><code spellcheck="false" class="code-81e98f88" data-slate-leaf="true">[[I</code></span><span data-offset-key="95b63abab0584f2ab84aec21a0a85f8a:20">。</span></span></span></p><p class="blockParagraph-544a408c" data-key="81011e4bc82040c98f29dad6158fd7fc"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="c6c370145ddd44b99f8bf878df58f19c"><span data-offset-key="c6c370145ddd44b99f8bf878df58f19c:0">试着自行解读 4.3.3 中对方法描述符的表示，并试图写出下面这个方法的描述符</span></span></span></p><p class="blockParagraph-544a408c" data-key="7c12eb5ae6374f798cc7c623a9ded022"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="29335cb282674052ad432510692fefaf"><span data-offset-key="29335cb282674052ad432510692fefaf:0"><code spellcheck="false" class="code-81e98f88" data-slate-leaf="true">int[] foo(int i, Integer i2, Object o);</code></span></span></span></p><p class="blockParagraph-544a408c" data-key="db443d70e002451181e11de0569cf9a1"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="be18548b418344b9aac4ac689415f876"><span data-offset-key="be18548b418344b9aac4ac689415f876:0">4.4 是对常量池信息的描述，特别需要提醒的是 4.4.7 Utf8_info 中，有对 </span><span data-offset-key="be18548b418344b9aac4ac689415f876:1"><code spellcheck="false" class="code-81e98f88" data-slate-leaf="true">modified UTF-8</code></span><span data-offset-key="be18548b418344b9aac4ac689415f876:2">格式的描述，感兴趣的同学可以自行查阅文字编码相关的更多资料，在实现中直接使用</span><span data-offset-key="be18548b418344b9aac4ac689415f876:3"><code spellcheck="false" class="code-81e98f88" data-slate-leaf="true">String</code></span><span data-offset-key="be18548b418344b9aac4ac689415f876:4">的构造器</span><span data-offset-key="be18548b418344b9aac4ac689415f876:5"><code spellcheck="false" class="code-81e98f88" data-slate-leaf="true">String(byte[])</code></span><span data-offset-key="be18548b418344b9aac4ac689415f876:6">即可把对应的</span><span data-offset-key="be18548b418344b9aac4ac689415f876:7"><code spellcheck="false" class="code-81e98f88" data-slate-leaf="true">modified UTF-8</code></span><span data-offset-key="be18548b418344b9aac4ac689415f876:8">序列变成 Java 字符串。</span></span></span></p><p class="blockParagraph-544a408c" data-key="954f29857e6340f9a7a28a4d0815c375"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="63894daf553d42d7b7199da6f092ac5f"><span data-offset-key="63894daf553d42d7b7199da6f092ac5f:0">4.5-4.6 内容较为简单，大家如果有问题可以相互讨论或在群里提问( ´▽` )ﾉ</span></span></span></p><p class="blockParagraph-544a408c" data-key="84a6ffcfe2354c78a60b8a4a346ebf06"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="2ca4111621fb4764b87c75ada34d1dd3"><span data-offset-key="2ca4111621fb4764b87c75ada34d1dd3:0">4.7 中有对 attribtue 的详细解读，在后续的实验中会有更进一步的讲解</span></span></span></p><blockquote class="blockQuote-7a0db092" data-key="51c5b53f029443f7bccccd41dec69232"><p class="blockParagraph-544a408c--blockParagraphQuoted-280e03a6" data-key="c197592367e24f0eb7cbf0f1501f34ee"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="5b1cbc5d946d4e029ebf59950abed3af"><span data-offset-key="5b1cbc5d946d4e029ebf59950abed3af:0">上面的指南是我能想到的一些可能会让新手比较困惑的地方，但是即使有了这个指南，读手册依然是一件很有难度的事情。实际上，在理解了手册内容之后，本实验的难度并不高。训练大家阅读手册的能力是这个实验最重要的目的之一。</span></span></span></p><p class="blockParagraph-544a408c--blockParagraphQuoted-280e03a6" data-key="c7201e2089434f6ab1b9e5018f176c1c"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="5c4b57b9e6404f218e4dbb2f1f65a232"><span data-offset-key="5c4b57b9e6404f218e4dbb2f1f65a232:0">手册上是对 JVM 严谨的描述，所以有些内容其实可读性不是那么好，甚至需要来回读几次才能理解。这个过程需要花费时间，但是是有价值的。</span></span></span></p><p class="blockParagraph-544a408c--blockParagraphQuoted-280e03a6" data-key="2eea89a8055940058ba85a747e74c0a4"><span class="text-4505230f--TextH400-3033861f--textContentFamily-49a318e1"><span data-key="f04f7b6d5a024f70b28d41e8929a5669"><span data-offset-key="f04f7b6d5a024f70b28d41e8929a5669:0">最后，大家不要害怕，如果读手册的过程中遇到任何问题，可以在群里求助同学和助教们，希望大家玩儿得开心！</span></span></span></p></blockquote></div></div></div></div><div class="reset-3c756112--pageFooter-f1d5e2b0"><div class="reset-3c756112"><div class="reset-3c756112--navPagesLinks-67bea901"><a class="reset-3c756112--card-6570f064--whiteCard-fff091a4--cardPrevious-56a5e674" href="/mooc-minilab/class-file-reader"><div class="reset-3c756112--cardIcon-5b647d22"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" class="icon-7f6730be--text-3f89f380"><g><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></g></svg></div><div class="reset-3c756112--cardBody-25dca3b1--cardPreviousBody-79f02c06"><div class="reset-3c756112--cardHint-2c5d8183"><span class="text-4505230f--TextH200-a3425406--textContentFamily-49a318e1">mooc minilab - 以前</span></div><div class="reset-3c756112--cardTitle-32aa092e"><span class="text-4505230f--UIH400-4e41e82a--textContentFamily-49a318e1">Lab2 ClassFileReader</span></div></div></a><a class="reset-3c756112--card-6570f064--whiteCard-fff091a4--cardNext-19241c42" href="/jvvm-framework/framework-intro"><div class="reset-3c756112--cardBody-25dca3b1"><div class="reset-3c756112--cardHint-2c5d8183"><span class="text-4505230f--TextH200-a3425406--textContentFamily-49a318e1">下一个 - JVVM Framework</span></div><div class="reset-3c756112--cardTitle-32aa092e"><span class="text-4505230f--UIH400-4e41e82a--textContentFamily-49a318e1">Framework Intro(施工中)</span></div></div><div class="reset-3c756112--cardIcon-5b647d22"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" class="icon-7f6730be--text-3f89f380"><g><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></g></svg></div></a></div></div><div class="reset-3c756112--pageFooterColumns-ef8f347e"><div class="reset-3c756112--pageFooterSummary-12074aff"><div class="reset-3c756112--pageChangesSummary-08821678"><div class="reset-3c756112--pageContributors-5c59582e"><div class="reset-3c756112--ownerAvatarList-696792ce"></div></div><div class="reset-3c756112--pageEditedDate-b805c39a"><span class="text-4505230f--TextH200-a3425406--textContentFamily-49a318e1">最近更新 <span>34 minutes ago</span></span></div></div></div></div></div></div><div class="reset-3c756112--pageSide-ad9fed26"><div class="reset-3c756112--stickyContainer-2bed3a82"><div style="padding-bottom:0" class="reset-3c756112"></div><div class="reset-3c756112--tocWrapper-506ea24c"><div class="reset-3c756112--withScrollbar-39338630--scrollAxisY-7680295e--scrollableContainer-756c9114"><div class="reset-3c756112--pageSideSection-542f1fd5"><div class="reset-3c756112--menu-5b8a7448--pageToc-16c35922--pageTocLive-542f1fd5"><div class="reset-3c756112--withScrollbar-39338630--scrollAxisY-7680295e--menuItems-2e6f017b--pageTocLiveItems-67c61496"><div class="reset-3c756112--menuHeader-342906de--menuHeaderLight-2c5d8183"><div class="reset-3c756112--menuHeaderIcon-0c3ed569"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" class="icon-7f6730be--text-3f89f380"><g><line x1="21" y1="10" x2="7" y2="10"></line><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="14" x2="3" y2="14"></line><line x1="21" y1="18" x2="7" y2="18"></line></g></svg></div><div class="reset-3c756112"><span class="text-4505230f--InfoH100-1e92e1d1--textContentFamily-49a318e1">内容</span></div></div><a class="reset-3c756112--menuItem-aa02f6ec--menuItemLight-757d5235--menuItemInline-173bdf97--pageTocItem-f4427024" href="#0-zhong-yao-shuo-ming"><div class="reset-3c756112--menuItemContent-c44ec79e"><span class="text-4505230f--UIH300-2063425d--textContentFamily-49a318e1"><span class="text-4505230f--UIH200-50ead35f--textContentFamily-49a318e1">0. 重要说明</span></span></div></a><a class="reset-3c756112--menuItem-aa02f6ec--menuItemLight-757d5235--menuItemInline-173bdf97--pageTocItem-f4427024" href="#shi-yan-geng-xin-shuo-ming"><div class="reset-3c756112--menuItemContent-c44ec79e"><span class="text-4505230f--UIH300-2063425d--textContentFamily-49a318e1"><span class="text-4505230f--UIH200-50ead35f--textContentFamily-49a318e1--pageTocLinkH2-2294976c">实验更新说明</span></span></div></a><a class="reset-3c756112--menuItem-aa02f6ec--menuItemLight-757d5235--menuItemInline-173bdf97--pageTocItem-f4427024" href="#1-shi-yan-bei-jing"><div class="reset-3c756112--menuItemContent-c44ec79e"><span class="text-4505230f--UIH300-2063425d--textContentFamily-49a318e1"><span class="text-4505230f--UIH200-50ead35f--textContentFamily-49a318e1">1. 实验背景</span></span></div></a><a class="reset-3c756112--menuItem-aa02f6ec--menuItemLight-757d5235--menuItemInline-173bdf97--pageTocItem-f4427024" href="#2-shi-yan-yao-qiu"><div class="reset-3c756112--menuItemContent-c44ec79e"><span class="text-4505230f--UIH300-2063425d--textContentFamily-49a318e1"><span class="text-4505230f--UIH200-50ead35f--textContentFamily-49a318e1">2. 实验要求</span></span></div></a><a class="reset-3c756112--menuItem-aa02f6ec--menuItemLight-757d5235--menuItemInline-173bdf97--pageTocItem-f4427024" href="#21-shi-yan-shu-ru"><div class="reset-3c756112--menuItemContent-c44ec79e"><span class="text-4505230f--UIH300-2063425d--textContentFamily-49a318e1"><span class="text-4505230f--UIH200-50ead35f--textContentFamily-49a318e1--pageTocLinkH2-2294976c">2.1 实验输入</span></span></div></a><a class="reset-3c756112--menuItem-aa02f6ec--menuItemLight-757d5235--menuItemInline-173bdf97--pageTocItem-f4427024" href="#22-shi-yan-shu-chu"><div class="reset-3c756112--menuItemContent-c44ec79e"><span class="text-4505230f--UIH300-2063425d--textContentFamily-49a318e1"><span class="text-4505230f--UIH200-50ead35f--textContentFamily-49a318e1--pageTocLinkH2-2294976c">2.2 实验输出</span></span></div></a><a class="reset-3c756112--menuItem-aa02f6ec--menuItemLight-757d5235--menuItemInline-173bdf97--pageTocItem-f4427024" href="#23-shi-yan-yao-qiu"><div class="reset-3c756112--menuItemContent-c44ec79e"><span class="text-4505230f--UIH300-2063425d--textContentFamily-49a318e1"><span class="text-4505230f--UIH200-50ead35f--textContentFamily-49a318e1--pageTocLinkH2-2294976c">2.3 实验要求</span></span></div></a><a class="reset-3c756112--menuItem-aa02f6ec--menuItemLight-757d5235--menuItemInline-173bdf97--pageTocItem-f4427024" href="#24-dai-ma-zhi-dao"><div class="reset-3c756112--menuItemContent-c44ec79e"><span class="text-4505230f--UIH300-2063425d--textContentFamily-49a318e1"><span class="text-4505230f--UIH200-50ead35f--textContentFamily-49a318e1--pageTocLinkH2-2294976c">2.4 代码指导</span></span></div></a><a class="reset-3c756112--menuItem-aa02f6ec--menuItemLight-757d5235--menuItemInline-173bdf97--pageTocItem-f4427024" href="#3-shou-ce-jian-jie-lai-zi-xxz-zhu-jiao"><div class="reset-3c756112--menuItemContent-c44ec79e"><span class="text-4505230f--UIH300-2063425d--textContentFamily-49a318e1"><span class="text-4505230f--UIH200-50ead35f--textContentFamily-49a318e1">3. 手册简介（来自xxz助教）</span></span></div></a></div></div></div></div></div></div></div></div></div></div></div></div></div></div>
+            <div id="__GITBOOK__ROOT__CLIENT__" style="display: none;"></div>
+            <script>
+            window.GITBOOK_STATE = {"state":{"database":{"orgs/5a6c28e0462964002fe39740/infos":{"kind":"user","data":{"kind":"user","uid":"5a6c28e0462964002fe39740","baseDomain":"minguw","defaultSpace":null,"displayName":"wym0120","photoURL":null,"deletedAt":null,"usageStatuses":{"members":"below","privateSpaces":"below","publicSpaces":"below"}}},"spaces/-M7HTVnrQXURnsIjLi0Q/infos":{"kind":"space","data":{"uid":"-M7HTVnrQXURnsIjLi0Q","name":"JVM实验框架文档","createdAt":1589447888119,"ownerID":"5a6c28e0462964002fe39740","isPrivate":false,"isUnlisted":false,"secretToken":null,"baseName":"jvm","createdBy":"5a6c28e0462964002fe39740","logoURL":null,"fullLogoURL":null,"emoji":"1f58c","colorPrimary":"#6BB6B6","headerTheme":"light","font":null,"locale":"zh","primaryRevision":"-M7hIS49oVFdrhP8Psti","edits":{"5a6c28e0462964002fe39740":{"createdAt":1589447888119,"updatedAt":1589899999535,"count":45}},"algoliaAPIKey":"OGVkMGM4NmRkYjMxNWIyZDNmNWU2YWE0MTJkYTFlMjJhYzIxYWY4YmE0YWQzZTc1NWQyYThiMGRhYzU5MGJhMGZpbHRlcnM9LU03SFRWbnJRWFVSbnNJakxpMFE=","customDomain":"se1.abn-team.top","links":[],"hasGitHubSync":false,"editOnGitHub":null,"googleAnalyticsID":null,"intercomID":null,"hasPageRating":true,"hasPDFExport":false,"indexedRevision":"-M7hHmzNY4GZG-OC7YYy"}},"spaces/-M7HTVnrQXURnsIjLi0Q/revisions/-M7hIS49oVFdrhP8Psti":{"kind":"revision","data":{"uid":"-M7hIS49oVFdrhP8Psti","message":"","createdAt":1589899999535,"createdBy":"5a6c28e0462964002fe39740","parents":["-M7hHmzNY4GZG-OC7YYy"],"content":{"primaryVersion":"master","versions":{"master":{"index":0,"ref":"master","title":"1.0.0","github":null,"locale":null,"entryPage":"-M7HXDc84hWA-TcjRDYk","pages":{"-M7HXDc84hWA-TcjRDYk":{"uid":"-M7HXDc84hWA-TcjRDYk","kind":"document","title":"生存指南","path":"master","href":null,"description":"","documentURL":"https://firebasestorage.googleapis.com/v0/b/gitbook-28427.appspot.com/o/documents%2F-M7HTVnrQXURnsIjLi0Q%2F-M7YYSQsEy37g97zF2hv%2Fmaster%2F-M7HXDc84hWA-TcjRDYk%2Fdocument.json?alt=media\u0026token=3e7dabc6-0ae4-466a-a687-151c427c69ed","createdAt":1589448862217,"edits":{"5a6c28e0462964002fe39740":{"createdAt":1589449249268,"updatedAt":1589734408770,"count":7}},"github":null,"stats":{"words":3241,"images":0,"codeLines":0,"revisions":0},"pages":["-M7hLnk5KZxFTcsFNhpW","-M7dUxSnMJm0vLMsavdf","-M7XWgCq1SgWvrWsB_r9","-M7YZ5OJomsouUNggX_P"]},"-M7hLnk5KZxFTcsFNhpW":{"uid":"-M7hLnk5KZxFTcsFNhpW","kind":"document","title":"相关教材推荐","path":"xiang-guan-jiao-cai-tui-jian","href":null,"description":"","documentURL":"https://firebasestorage.googleapis.com/v0/b/gitbook-28427.appspot.com/o/documents%2F-M7HTVnrQXURnsIjLi0Q%2F-M7hIS49oVFdrhP8Psti%2Fmaster%2F-M7hLnk5KZxFTcsFNhpW%2Fdocument.json?alt=media\u0026token=0c8becfd-0839-4aea-ada6-bb97e24b35a9","createdAt":1589898853382,"edits":{"5a6c28e0462964002fe39740":{"createdAt":1589899995226,"updatedAt":1589899995226,"count":1}},"github":null,"stats":{"words":62,"images":0,"codeLines":0,"revisions":0},"pages":null},"-M7dUxSnMJm0vLMsavdf":{"uid":"-M7dUxSnMJm0vLMsavdf","kind":"document","title":"工具安利(施工中)","path":"tools","href":null,"description":"","documentURL":"https://firebasestorage.googleapis.com/v0/b/gitbook-28427.appspot.com/o/documents%2F-M7HTVnrQXURnsIjLi0Q%2F-M7dMVzTt7yWizXRcHsO%2Fmaster%2F-M7dUxSnMJm0vLMsavdf%2Fdocument.json?alt=media\u0026token=59d3a79f-8a7a-49d9-be58-ed4160ed7b67","createdAt":1589834143604,"edits":{"5a6c28e0462964002fe39740":{"createdAt":1589834255765,"updatedAt":1589834255765,"count":1}},"github":null,"stats":{"words":4,"images":0,"codeLines":0,"revisions":0},"pages":null},"-M7XWgCq1SgWvrWsB_r9":{"uid":"-M7XWgCq1SgWvrWsB_r9","kind":"group","title":"mooc minilab","path":"mooc-minilab","href":null,"description":"","documentURL":null,"createdAt":1589717156726,"edits":{},"github":null,"stats":null,"pages":["-M7bJhkWdggdxnJnNCrv","-M7YZ8ok-ZxWMJCTUlnA","-M7XWgCrgjwSWcBMeXyj"]},"-M7bJhkWdggdxnJnNCrv":{"uid":"-M7bJhkWdggdxnJnNCrv","kind":"document","title":"Lab1 CommandLineUtil","path":"command-line-util","href":null,"description":"","documentURL":"https://firebasestorage.googleapis.com/v0/b/gitbook-28427.appspot.com/o/documents%2F-M7HTVnrQXURnsIjLi0Q%2F-M7bitICdUynh_iudUP-%2Fmaster%2F-M7bJhkWdggdxnJnNCrv%2Fdocument.json?alt=media\u0026token=83131acc-a43d-4b69-8fa8-e4b72850331b","createdAt":1589797641249,"edits":{"5a6c28e0462964002fe39740":{"createdAt":1589797734507,"updatedAt":1589804799947,"count":6}},"github":null,"stats":{"words":928,"images":1,"codeLines":55,"revisions":0},"pages":null},"-M7YZ8ok-ZxWMJCTUlnA":{"uid":"-M7YZ8ok-ZxWMJCTUlnA","kind":"document","title":"Lab2 ClassFileReader","path":"class-file-reader","href":null,"description":"","documentURL":"https://firebasestorage.googleapis.com/v0/b/gitbook-28427.appspot.com/o/documents%2F-M7HTVnrQXURnsIjLi0Q%2F-M7bP40ZCpa74Y1qNmqM%2Fmaster%2F-M7YZ8ok-ZxWMJCTUlnA%2Fdocument.json?alt=media\u0026token=ff8bca28-4fbe-4934-a349-b177e45fd958","createdAt":1589734579504,"edits":{"5a6c28e0462964002fe39740":{"createdAt":1589735542905,"updatedAt":1589799154417,"count":4}},"github":null,"stats":{"words":2506,"images":0,"codeLines":36,"revisions":0},"pages":null},"-M7XWgCrgjwSWcBMeXyj":{"uid":"-M7XWgCrgjwSWcBMeXyj","kind":"document","title":"Lab3 ClassFileParser","path":"class-file-parser","href":null,"description":"","documentURL":"https://firebasestorage.googleapis.com/v0/b/gitbook-28427.appspot.com/o/documents%2F-M7HTVnrQXURnsIjLi0Q%2F-M7hHmzNY4GZG-OC7YYy%2Fmaster%2F-M7XWgCrgjwSWcBMeXyj%2Fdocument.json?alt=media\u0026token=2042b9a0-c975-455f-b739-78c255905c85","createdAt":1589717156727,"edits":{"5a6c28e0462964002fe39740":{"createdAt":1589717188012,"updatedAt":1589897967801,"count":31}},"github":null,"stats":{"words":3032,"images":2,"codeLines":34,"revisions":0},"pages":null},"-M7YZ5OJomsouUNggX_P":{"uid":"-M7YZ5OJomsouUNggX_P","kind":"group","title":"JVVM Framework","path":"jvvm-framework","href":null,"description":"","documentURL":null,"createdAt":1589734565461,"edits":{},"github":null,"stats":null,"pages":["-M7dMDU9UCjzPHSM0_Fc"]},"-M7dMDU9UCjzPHSM0_Fc":{"uid":"-M7dMDU9UCjzPHSM0_Fc","kind":"document","title":"Framework Intro(施工中)","path":"framework-intro","href":null,"description":"框架代码导读","documentURL":"https://firebasestorage.googleapis.com/v0/b/gitbook-28427.appspot.com/o/documents%2F-M7HTVnrQXURnsIjLi0Q%2F-M7duSh2qhCWsNKzMdry%2Fmaster%2F-M7dMDU9UCjzPHSM0_Fc%2Fdocument.json?alt=media\u0026token=5813255e-c371-4886-a6ce-14176f5ccb0d","createdAt":1589831854026,"edits":{"5a6c28e0462964002fe39740":{"createdAt":1589834255781,"updatedAt":1589841287475,"count":10}},"github":null,"stats":{"words":0,"images":0,"codeLines":0,"revisions":0},"pages":["-M7dulZNHIKl9yWeeRNr","-M7dug3dZybD7Jy8QcfV"]},"-M7dulZNHIKl9yWeeRNr":{"uid":"-M7dulZNHIKl9yWeeRNr","kind":"document","title":"从计算机的视角看待JVM","path":"cong-ji-suan-ji-de-shi-jiao-kan-dai-jvm","href":null,"description":"","documentURL":"https://firebasestorage.googleapis.com/v0/b/gitbook-28427.appspot.com/o/documents%2F-M7HTVnrQXURnsIjLi0Q%2F-M7duSh2qhCWsNKzMdry%2Fmaster%2F-M7dulZNHIKl9yWeeRNr%2Fdocument.json?alt=media\u0026token=c2829b24-add9-49b0-b5bf-1eb6579d3d2d","createdAt":1589841172760,"edits":{"5a6c28e0462964002fe39740":{"createdAt":1589841287491,"updatedAt":1589841287491,"count":1}},"github":null,"stats":{"words":2026,"images":0,"codeLines":0,"revisions":0},"pages":null},"-M7dug3dZybD7Jy8QcfV":{"uid":"-M7dug3dZybD7Jy8QcfV","kind":"document","title":"代码结构","path":"dai-ma-jie-gou","href":null,"description":"","documentURL":null,"createdAt":1589841150249,"edits":{"5a6c28e0462964002fe39740":{"createdAt":1589841864427,"updatedAt":1589841864427,"count":1}},"github":null,"stats":{"words":0,"images":0,"codeLines":0,"revisions":0},"pages":null}}}},"assets":{"-M7bKapOnMl5WCHeaVt2":{"uid":"-M7bKapOnMl5WCHeaVt2","name":"Flow_Chart.jpg","downloadURL":"https://firebasestorage.googleapis.com/v0/b/gitbook-28427.appspot.com/o/assets%2F-M7HTVnrQXURnsIjLi0Q%2F-M7bKVh5IoQj-wSyDjN8%2F-M7bKapOnMl5WCHeaVt2%2FFlow_Chart.jpg?alt=media\u0026token=20921d9a-0b84-4267-9636-d0b80025b069","size":38995,"contentType":"image/jpeg","createdAt":1589797875732,"github":null,"edits":{"5a6c28e0462964002fe39740":{"createdAt":1589797876160,"updatedAt":1589797876160,"count":1}}},"-M7d1d37IHpSmUYApFbD":{"uid":"-M7d1d37IHpSmUYApFbD","name":"7L%@`TMN9SN]Y}M$$ZUL6QI.png","downloadURL":"https://firebasestorage.googleapis.com/v0/b/gitbook-28427.appspot.com/o/assets%2F-M7HTVnrQXURnsIjLi0Q%2F-M7cxqzFETlQeISut1nH%2F-M7d1d37IHpSmUYApFbD%2F7L%25%40%60TMN9SN%5DY%7DM%24%24ZUL6QI.png?alt=media\u0026token=99d6e74b-21b4-4b04-9772-8745cb181564","size":5310,"contentType":"image/png","createdAt":1589826458525,"github":null,"edits":{"5a6c28e0462964002fe39740":{"createdAt":1589826459059,"updatedAt":1589826459059,"count":1}}},"-M7g5yna9rjxRISTlhWN":{"uid":"-M7g5yna9rjxRISTlhWN","name":"DM_`G`9$U`~5EC]A0S9{5JM.png","downloadURL":"https://firebasestorage.googleapis.com/v0/b/gitbook-28427.appspot.com/o/assets%2F-M7HTVnrQXURnsIjLi0Q%2F-M7fvr7TPNvzNiV7xkX3%2F-M7g5yna9rjxRISTlhWN%2FDM_%60G%609%24U%60~5EC%5DA0S9%7B5JM.png?alt=media\u0026token=f21e9c39-ae9a-44d6-a3eb-e06d654617b5","size":37595,"contentType":"image/png","createdAt":1589877929094,"github":null,"edits":{"5a6c28e0462964002fe39740":{"createdAt":1589877929267,"updatedAt":1589877929267,"count":1}}}}},"github":[],"rollbackOf":null}}},"documents":{"documents":{"https://firebasestorage.googleapis.com/v0/b/gitbook-28427.appspot.com/o/documents%2F-M7HTVnrQXURnsIjLi0Q%2F-M7hHmzNY4GZG-OC7YYy%2Fmaster%2F-M7XWgCrgjwSWcBMeXyj%2Fdocument.json?alt=media\u0026token=2042b9a0-c975-455f-b739-78c255905c85":{"format_version":1,"document":{"kind":"document","key":"16831a4a353840d79e32125687bd18c7","data":{"schema_version":6},"nodes":[{"kind":"block","type":"heading-1","key":"d84b8eb101ff4f288d36caf83caa1a96","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"cfe97fda99f74f979d3110a1b4cd5cf1","ranges":[{"kind":"range","marks":[],"text":"0. 重要说明"}]}]},{"kind":"block","type":"paragraph","key":"0ebd5479c6a04eafa3b750996ecab1e7","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"a2daee483bd34190ab987bce3eb2dda8","ranges":[{"kind":"range","marks":[],"text":"从本次实验开始，我们将使用第八版"}]},{"kind":"inline","type":"link","key":"b3a39242e569499a9249ecb9abdfcde5","isVoid":false,"data":{"href":"https://docs.oracle.com/javase/specs/jvms/se8/html/index.html"},"nodes":[{"kind":"text","key":"af27a1b36e264b5b8fb75b46093c80f9","ranges":[{"kind":"range","marks":[],"text":"JVM规范"}]}]},{"kind":"text","key":"2582ea5374704a32be0188f8c7b58f8a","ranges":[{"kind":"range","marks":[],"text":"作为辅助教材，网络上也有中文版的资源可以自行下载，但需要说明，部分实现细节依旧推荐直接看英文版，中文版中有很多翻译容易引起歧义。"}]}]},{"kind":"block","type":"paragraph","key":"1455c937ff91480b89c181ec561d6c84","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"2e946b62623343d58b80b302ffaf0e79","ranges":[{"kind":"range","marks":[],"text":"看很长的英文文档绝对是一个痛苦的过程，但这个过程会对你有非常大的帮助。在阅读文档时，我们不推荐一次性把文档中的每一个细节都弄清楚，也不推荐把大量的章节读完之后再开始编码。我们会在每一次的实验中规定需要读完的部分，更好的一种做法是先有个大概了解之后再在编码中反复验证自己的理解是否正确，是否有更多的细节需要注意。"}]}]},{"kind":"block","type":"paragraph","key":"1a24de12621d4c8ea5ac99c02e202e2d","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"1e41ee54ec834622bf49f24db8bcf0ae","ranges":[{"kind":"range","marks":[],"text":"同时，从第三次实验开始，将进行查重。因为框架代码的存在，对重复率的比重要求会相对放低。"},{"kind":"range","marks":[{"kind":"mark","data":{},"type":"bold"}],"text":"但是"},{"kind":"range","marks":[],"text":"，我们必须提醒，有很多看起来能够绕开查重的”聪明办法“实际上是不可行的，这里有一篇延伸阅读"}]},{"kind":"inline","type":"link","key":"e459ab3a5a804eab916bd0015e9d2635","isVoid":false,"data":{"href":"https://zhuanlan.zhihu.com/p/40568346"},"nodes":[{"kind":"text","key":"bf915aab0e0c4aaf8758ca67cac51991","ranges":[{"kind":"range","marks":[],"text":"《代码抄袭：那些让985学生沉默，211学生流泪的真相》"}]}]},{"kind":"text","key":"6fb796987ac349a69a47d061779a13e1","ranges":[{"kind":"range","marks":[],"text":""}]}]},{"kind":"block","type":"heading-2","key":"3d7acca16c154b5191c0765277cab8c7","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"1f391cad6b1849dfbc9884f4472750ab","ranges":[{"kind":"range","marks":[],"text":"实验更新说明"}]}]},{"kind":"block","type":"list-ordered","key":"1cfc652d39524865bef37109d35cc784","isVoid":false,"data":{},"nodes":[{"kind":"block","type":"list-item","key":"d632c65e2f7d4550bf869e716e2a3256","isVoid":false,"data":{},"nodes":[{"kind":"block","type":"paragraph","key":"a4ade08ee36a4bfea2b765f74797eb23","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"b913d716d67c4b05b23256b836488cf6","ranges":[{"kind":"range","marks":[],"text":"如果clone了项目之后出现get方法报红的情况，可能需要在IDEA中安装lombok插件。具体方法如下"}]}]}]}]},{"kind":"block","type":"image","key":"e36dc2c0656044d88670e7157524cf7e","isVoid":true,"data":{"assetID":"-M7g5yna9rjxRISTlhWN"},"nodes":[{"kind":"text","key":"5febbdb8a8f94445ab05c52df8314675","ranges":[{"kind":"range","marks":[{"kind":"mark","data":{},"type":"bold"}],"text":""}]}]},{"kind":"block","type":"paragraph","key":"b022ad3211004c1792239502ccacc3f8","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"fea230ca899e47cc81e8c353127a0250","ranges":[{"kind":"range","marks":[{"kind":"mark","data":{},"type":"bold"}],"text":""}]}]},{"kind":"block","type":"paragraph","key":"a249e1457c5c42819d0082de13119ff7","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"c0ef565aaf0c48158242580430eeb5dc","ranges":[{"kind":"range","marks":[{"kind":"mark","data":{},"type":"bold"}],"text":"2. UTF8Info中的String变量一定一定一定要命名为myString！！！不然会从JVVM-tool.jar中抛出一个框架代码的问题。由于平台上的版本不太好修改，只能请同学们自己注意了。"}]}]},{"kind":"block","type":"paragraph","key":"f7d60429c77044ef98d29ed31ef475dc","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"35492351ddd3440098380454d1e950b0","ranges":[{"kind":"range","marks":[],"text":""}]}]},{"kind":"block","type":"heading-1","key":"3a3158f9605a4b39882fb6219a972e2d","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"4a07bc2823e64160831a0eb9e9e199ed","ranges":[{"kind":"range","marks":[],"text":"1. 实验背景"}]}]},{"kind":"block","type":"paragraph","key":"b01bc9f728424aea9a195f3037a71148","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"b11383d121a343a89b0a0943dd446fa0","ranges":[{"kind":"range","marks":[],"text":"在上一次的实验中我们已经使用一个ClassFileReader根据类名读取到了class文件，在本次的实验中我们将进一步对这个文件进行操作。JVM规范中使用了一个类似C语言的结构体语法来描述class文件 ："}]}]},{"kind":"block","type":"code","key":"1883996c616142a8b31a60e312bf01d7","isVoid":false,"data":{"syntax":"text"},"nodes":[{"kind":"block","type":"code-line","key":"a6a36eb4ae724e0e81282e2bbd748688","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"1ce0bb5145f342a6949b86216505b897","ranges":[{"kind":"range","marks":[],"text":"ClassFile {"}]}]},{"kind":"block","type":"code-line","key":"5621b3d5c9bc4168856b2b061fd907c6","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"3a2e1de1203643fd8e39a20fafa8ea01","ranges":[{"kind":"range","marks":[],"text":"\tu4 magic; //魔数"}]}]},{"kind":"block","type":"code-line","key":"317e5dc6c0da4407ae2b5b5abb45b45f","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"bbdc9b8bb946429cba97a83e61905405","ranges":[{"kind":"range","marks":[],"text":"\tu2 minor_version; //次版本号"}]}]},{"kind":"block","type":"code-line","key":"19765042e08d417d8ca045f654751cb2","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"6e720b9881da4fefbdfbda5bbb635ecf","ranges":[{"kind":"range","marks":[],"text":"\tu2 major_version; //主版本号"}]}]},{"kind":"block","type":"code-line","key":"5464a5a7705e480aa79f494ff686d722","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"b244c5d13e2f42fcbbc64f439c12dacf","ranges":[{"kind":"range","marks":[],"text":"\tu2 constant_pool_count; //常量池数"}]}]},{"kind":"block","type":"code-line","key":"3861e819f3764d4b9ff42ded599a0858","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"e34e8ca3eea246d7897971fd0ca938b9","ranges":[{"kind":"range","marks":[],"text":" \tcp_info constant_pool[constant_pool_count-1]; //常量池"}]}]},{"kind":"block","type":"code-line","key":"b6eb9f8d20d047b985efd921bafefb9f","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"51b62a5c91394e0daa6e801e089a66c2","ranges":[{"kind":"range","marks":[],"text":"\tu2 access_flags; //访问标志"}]}]},{"kind":"block","type":"code-line","key":"a34290f3095e4529b44ee6bc2f93e72c","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"f469dd2706e54827ab2a2f299fc93525","ranges":[{"kind":"range","marks":[],"text":"\tu2 this_class; //类名的常量池索引"}]}]},{"kind":"block","type":"code-line","key":"e2db2b0bf1964996860b51e3a7b69ad6","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"74ac08e2f997428a849f4d03f716fd37","ranges":[{"kind":"range","marks":[],"text":"\tu2 super_class; //父类类名的常量池索引"}]}]},{"kind":"block","type":"code-line","key":"0d7908742ecc42939a2dca95f8c79d3e","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"181a41b60ac449f0a4353e96ea2d45ea","ranges":[{"kind":"range","marks":[],"text":"\tu2 interfaces_count; //接口个数"}]}]},{"kind":"block","type":"code-line","key":"8fbc6069383a4279955eb3cc0cab4603","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"9ec1e51438b24ba0ba0cee224f123c04","ranges":[{"kind":"range","marks":[],"text":"\tu2 interfaces[interfaces_count]; //接口名的常量池索引"}]}]},{"kind":"block","type":"code-line","key":"6680e39e6f9d452092a9aa7e0b1ad383","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"f1ef28ba4be14d19ba6ad36afd0ab9c8","ranges":[{"kind":"range","marks":[],"text":"\tu2 fields_count; //字段数"}]}]},{"kind":"block","type":"code-line","key":"7a446a78b7214c0fb669c6c37303f9ac","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"586f18b44ac3443bbaa781137353eb81","ranges":[{"kind":"range","marks":[],"text":"\tfield_info fields[fields_count]; //字段表"}]}]},{"kind":"block","type":"code-line","key":"23999e1eb65640e282ce26ecfae897a6","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"71459880875d443f92d2446edc8f1ce7","ranges":[{"kind":"range","marks":[],"text":"\tu2 methods_count; //方法数"}]}]},{"kind":"block","type":"code-line","key":"3024d49b9e134e07a74c82ecfb06eb9b","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"ecf884839be142c6bd37941218b5b072","ranges":[{"kind":"range","marks":[],"text":"\tmethod_info methods[methods_count]; //方法表"}]}]},{"kind":"block","type":"code-line","key":"0e3841511d964d3e8b32386512c114f7","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"58fddd1ac3434a59a86e3ff4c8d868e2","ranges":[{"kind":"range","marks":[],"text":"\tu2 attributes_count; //属性数"}]}]},{"kind":"block","type":"code-line","key":"e2a6f5d6dc0b4b00aee9f1a74dd9efea","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"86700e2a1185442ca6bff6da9910a6e5","ranges":[{"kind":"range","marks":[],"text":"\tattribute_info attributes[attributes_count]; //属性表"}]}]},{"kind":"block","type":"code-line","key":"f203150180254fa49422e5dd3f47601c","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"bfff8e0616404e6698c16ae9b05a28b5","ranges":[{"kind":"range","marks":[],"text":"}"}]}]}]},{"kind":"block","type":"paragraph","key":"bb85ab37d2e2446c86689688705dcc4c","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"c5ba514dff014ef4a62aa2520f90d4d4","ranges":[{"kind":"range","marks":[],"text":"这次小实验的任务就是模仿 JVM 中的 classfile 解析器，正确解析一小部分 classfile 的内容并输出。"}]}]},{"kind":"block","type":"paragraph","key":"63cb7f7b10f04e6aa0be1a84418bd10f","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"6671b316206b4824a955d46a51530c80","ranges":[{"kind":"range","marks":[],"text":"关于 class file 的格式在JVM规范的第四章有详细解释，在这份实验说明的最后部分会向大家介绍阅读这部分手册的方法。"}]}]},{"kind":"block","type":"heading-1","key":"be61854a5f44426f89d13aa50662f62d","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"3a557d45610d4ccca140498430fb0628","ranges":[{"kind":"range","marks":[],"text":"2. 实验要求"}]}]},{"kind":"block","type":"heading-2","key":"4a5d0a208bfa469d89f35a4b85751c26","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"9e1f47f2322245218ecd2336d5c66b42","ranges":[{"kind":"range","marks":[],"text":"2.1 实验输入"}]}]},{"kind":"block","type":"paragraph","key":"3d7e8dfda73f43c7a9c193839d9f4238","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"5a69aee03b6749028932e20019ccec77","ranges":[{"kind":"range","marks":[],"text":"测试用例中的流程大致如下(这里进行了简化，不是真正的代码)"}]}]},{"kind":"block","type":"code","key":"404e2c0b6f234ba4b234dfe144337915","isVoid":false,"data":{"syntax":"text"},"nodes":[{"kind":"block","type":"code-line","key":"38aecd6a88e14540b16b6a3787967d09","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"6b6a837340674c25b78fb855c2f53239","ranges":[{"kind":"range","marks":[],"text":"byte[] content = ClassFileReader.readClassFile(className);"}]}]},{"kind":"block","type":"code-line","key":"2aa4b4fe34b14d6389e6e488f0636f13","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"209f026bf4f84583bb5d069332263532","ranges":[{"kind":"range","marks":[],"text":"ClassFile classfile = new ClassFile(content);"}]}]},{"kind":"block","type":"code-line","key":"c861fbbcc344429e8a1f1958ce48364f","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"1562b8466a414b3881175e0ba74507a3","ranges":[{"kind":"range","marks":[],"text":""}]}]},{"kind":"block","type":"code-line","key":"ef0ff702d9034264b2a810f680095023","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"d37fccae28ba424bae709426b82e2612","ranges":[{"kind":"range","marks":[],"text":"\\\\进行assert测试"}]}]},{"kind":"block","type":"code-line","key":"dc9ed44bc3a8475f9a6762b6e577b3c5","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"465f4b016d99427da1f3d46ac432f1e9","ranges":[{"kind":"range","marks":[],"text":"assertEquals(expected,real);"}]}]},{"kind":"block","type":"code-line","key":"e32c0f11943646449575d11d94ebae90","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"e68771f316294eba939eba6d3146de4e","ranges":[{"kind":"range","marks":[],"text":"..."}]}]},{"kind":"block","type":"code-line","key":"598982da7b6141fc81e500352ebc8433","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"8876e4110056484a81d6c2e6634409b8","ranges":[{"kind":"range","marks":[],"text":""}]}]},{"kind":"block","type":"code-line","key":"3a39bbf8572f4a0390c0bdba9029c97a","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"e613e17ae5ae4284ab559da2a752de3d","ranges":[{"kind":"range","marks":[],"text":"JClass clazz = new JClass(classfile);"}]}]},{"kind":"block","type":"code-line","key":"aed6c19bf3f74712923ca4c056db52dd","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"8d1184a95a214ba28e0b9ec942e989fe","ranges":[{"kind":"range","marks":[],"text":"\\\\进行assert测试"}]}]},{"kind":"block","type":"code-line","key":"2154e01ab7b4473195b84950ea1d3503","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"b6ea8dfdc1f2467a8c8e2bec223c3da4","ranges":[{"kind":"range","marks":[],"text":"assertEquals(expected,real);"}]}]},{"kind":"block","type":"code-line","key":"21e128a458214f50b3d2e118d29c58f9","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"59bfe4401c4c4fbe85ca2bb0f179585a","ranges":[{"kind":"range","marks":[],"text":"..."}]}]}]},{"kind":"block","type":"paragraph","key":"9dfe58f289f348b5b24cada2d5d970ab","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"254c13578c4445449e9093adc1e8214d","ranges":[{"kind":"range","marks":[],"text":"我们利用了上一次作业中实现的ClassFileReader读取到了对应的文件并转换成了byte数组的形式。我们已经保证了读取文件的正确。"}]}]},{"kind":"block","type":"paragraph","key":"68e31dd2c34c46d4bd97be9d581d370b","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"9f6ee0e96ae444918dfd9052fd82c56c","ranges":[{"kind":"range","marks":[],"text":"从上面的代码中可以看出，我们有两个主要的类，ClassFile和JClass。实验中只需要保证这两个构造器不被修改即可。同时，这两个类中已有的以get开头的方法请不要随意删除，因为测试需要调用它们。"}]}]},{"kind":"block","type":"code","key":"20a870bb472a4cb4818fa2fec705bf0a","isVoid":false,"data":{"syntax":"text"},"nodes":[{"kind":"block","type":"code-line","key":"75962e9f47444b2b93d0dcbc8757eead","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"3f26a574e68a431d9f5b7db6fb7361d7","ranges":[{"kind":"range","marks":[],"text":"public ClassFile(byte[] classfile) {...}"}]}]},{"kind":"block","type":"code-line","key":"2c6ed5ed075d4041968b42ce31e16986","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"f5f55350db674074b18abd9b0cb042b5","ranges":[{"kind":"range","marks":[],"text":"public JClass(ClassFile classFile) {...}"}]}]}]},{"kind":"block","type":"heading-2","key":"ba819adb07cb4c7798730e24b6e3396f","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"1bc4ac8be1d44cb3baf84845c57d5376","ranges":[{"kind":"range","marks":[],"text":"2.2 实验输出"}]}]},{"kind":"block","type":"paragraph","key":"66a37591528842cea0440248a0d5d1eb","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"ea09b9f08aca4ea7b04d3be916668eff","ranges":[{"kind":"range","marks":[],"text":"在实验中你的一部分工作是完成这两个构造方法中缺失的部分。我们会调用classFile和clazz这两个变量的getXXX方法进行assert测试。整个测试过程中不会接收任何异常，这意味着你需要catch掉所有可能的异常。"}]}]},{"kind":"block","type":"heading-2","key":"aec828abd2704eae8b9df757ceaa1095","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"c78d65a4653745319e8a694ecb8aff42","ranges":[{"kind":"range","marks":[],"text":"2.3 实验要求"}]}]},{"kind":"block","type":"paragraph","key":"fe833c108fa94c7da35781a9a215d30f","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"becff3aed62b4401b4975a2e79d879a5","ranges":[{"kind":"range","marks":[],"text":"本次的实验要求较为分散，在代码中我们使用了 \"//todo\" 这样的注释对你需要完成的部分进行了标记，并且在缺失代码的地方使用了\"/**...Add some codes here.*/\"如果你是IDEA用户你可以使用左下角的todo按钮来查看所有的要求。你也可以进行全文搜索todo或\"Add some codes here\"字符串完成这项任务。"}]}]},{"kind":"block","type":"list-ordered","key":"d1d3c203ac43439fa253702c23700105","isVoid":false,"data":{},"nodes":[{"kind":"block","type":"list-item","key":"21ac58d3fa13404ab3a0990c9e5573bc","isVoid":false,"data":{},"nodes":[{"kind":"block","type":"paragraph","key":"3c333d7e4f5e41409d7ff711afcec53b","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"3096d8bffa054fe0b53f6d9bf48b3ec2","ranges":[{"kind":"range","marks":[],"text":"完成ClassFile和JClass构造器中缺失的部分"}]}]}]},{"kind":"block","type":"list-item","key":"f847d0ea457f48ebb16081c2bea977de","isVoid":false,"data":{},"nodes":[{"kind":"block","type":"paragraph","key":"635d39c2df394861804369ee51c7013f","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"3e91db6568fc49cc81e126157c0ce1c0","ranges":[{"kind":"range","marks":[],"text":"完成ConstantPoolInfo类中的getConstantPoolInfo方法，你需要补全ClassInfo和UTF8Info的实现并且别忘了在getConstantPoolInfo中对它们进行使用"}]}]}]},{"kind":"block","type":"list-item","key":"5aea80a5968f4a5ca6f7d5ca1e15aa8b","isVoid":false,"data":{},"nodes":[{"kind":"block","type":"paragraph","key":"5b39b40a0ec3466f9f34a5c1c18bbad5","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"4cbcdfd443f948f1a70dd0cfc3931c83","ranges":[{"kind":"range","marks":[],"text":"完成Field构造器中的代码"}]}]}]},{"kind":"block","type":"list-item","key":"8cdeb75bdab84c55933d6ced3edcd57d","isVoid":false,"data":{},"nodes":[{"kind":"block","type":"paragraph","key":"6d3b6c7e5ded4a4ba9ae4d104781af12","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"45a91f73dbbc464cb0a3fe10bc39d232","ranges":[{"kind":"range","marks":[],"text":"完成Method类中的计算argc的方法（calculateArgcFromDescriptor）"}]}]}]}]},{"kind":"block","type":"paragraph","key":"6535eaf0f5a946ada3e285435c9ce379","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"c281d52a638d4a02a604204c18793a9d","ranges":[{"kind":"range","marks":[{"kind":"mark","data":{},"type":"bold"}],"text":"需要额外注意：请不要移动已经存在的类，对包结构的改变可能会带来不确定的行为，多数情况下你会面临依赖问题"}]}]},{"kind":"block","type":"heading-2","key":"8363cc7aefb043eaaf1f81c441bc9ff1","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"e5e53e17fbb848759bc86ddaffe68328","ranges":[{"kind":"range","marks":[],"text":"2.4 代码指导"}]}]},{"kind":"block","type":"paragraph","key":"e73157a9fdb74f03ab4e1239c058d5af","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"4de4bc6571fa498199f68206997b1abe","ranges":[{"kind":"range","marks":[],"text":"在这次的代码中我们已经删去了一些可能会影响你阅读源码的部分，例如对属性表的解析，你将在真正的大作业框架中见到它。"}]}]},{"kind":"block","type":"heading-3","key":"b267f03bee504004a72812769eaf852e","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"441e7e4b5d254006978c47bb33d58871","ranges":[{"kind":"range","marks":[],"text":"完成要求1:"}]}]},{"kind":"block","type":"paragraph","key":"c75bddb82155471fa834be5b6a4f1028","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"c8bc30287d104a4298e403849a6bcf9d","ranges":[{"kind":"range","marks":[],"text":" 你需要仔细阅读手册中的class file规范，对于如何处理byte数组我们在相应的构造器代码中已经有一些实现作为参考。一个debug技巧：在ClassFile的构造器代码中我们故意留出了“this.accessFlags = in.getShort();”这条语句。在这条语句之前你需要正确完成常量池部分的代码。你可以将断点打在accessFlags的下一条语句，如果你正确完成了，在执行到断点时，accessFlag的值应该与你通过javap获得的结果是一致的。"}]}]},{"kind":"block","type":"paragraph","key":"601cf5233ccc4f5c9745d4b17601459e","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"987386c182b74d188283abe68164abd4","ranges":[{"kind":"range","marks":[],"text":"例如在正确实现的版本中，java/lang/Object的accessFlags为0x21(IDEA中使用右键see as hex)，查阅手册"}]},{"kind":"inline","type":"link","key":"7834b2dbbe354c2d83398de9efe72f86","isVoid":false,"data":{"href":"https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.1"},"nodes":[{"kind":"text","key":"68659a6b5cff48678089688635d9e29d","ranges":[{"kind":"range","marks":[],"text":"4.1节"}]}]},{"kind":"text","key":"ffb4d1736dfc4d71abe89b742b2ec67b","ranges":[{"kind":"range","marks":[],"text":"可以知道0x21是0x01+0x20，即PUBLIC+SUPER。和javap的结果一致。"}]}]},{"kind":"block","type":"image","key":"518f7d7564034ee4afc783b2c459e38a","isVoid":true,"data":{"assetID":"-M7d1d37IHpSmUYApFbD"},"nodes":[{"kind":"text","key":"0e98aeb4450d4e0195aef0a1a93b33c2","ranges":[{"kind":"range","marks":[],"text":""}]}]},{"kind":"block","type":"paragraph","key":"b2067895981a4f8fb63450070e4097e1","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"2a658ef178be48b4a90184c051e63d2e","ranges":[{"kind":"range","marks":[],"text":"在完成了这一步的验证之后再继续编码会让你的信心增强很多~"}]}]},{"kind":"block","type":"heading-3","key":"8e47b23176a945b0b12986080e163718","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"5962470b626f47ccb50f2b22f5c7c059","ranges":[{"kind":"range","marks":[],"text":"完成要求2："}]}]},{"kind":"block","type":"hint","key":"433407c54a0647c2b7759204d9295684","isVoid":false,"data":{"style":"info"},"nodes":[{"kind":"block","type":"paragraph","key":"3f5e26e0e7b54d2488971fe35893e8be","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"4d1607261cf646b1a22d9891d807fcab","ranges":[{"kind":"range","marks":[],"text":"在开始实现这个要求之前，你应该已经读过文档中关于常量池的部分。弄清楚每一种常量池中的Info应该是什么样的结构，里面的常量池索引是一个什么概念。"}]}]}]},{"kind":"block","type":"paragraph","key":"4216b95ba82f402483b018d37ff0bf3b","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"af9e1d902ebc42418818652e992914e0","ranges":[{"kind":"range","marks":[],"text":"在ConstantPoolInfo类中，你需要完成ClassInfo与UTF8Info。其中ClassInfo相对好实现一点，但无法在UTF8Info完成之前真正完整地实现它。"}]}]},{"kind":"block","type":"paragraph","key":"923602cf7c6543538f4c098e57eb995a","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"b332b1c4056a46b78dd5c88a17fc516b","ranges":[{"kind":"range","marks":[],"text":"ClassInfo中的getClassName方法是返回类名，而所有类名都被放在了一个UTF8Info中。"}]}]},{"kind":"block","type":"paragraph","key":"3b8cc5423455422995a0f2ad00e50286","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"fd20c2adbf184022b109f9d85c491c08","ranges":[{"kind":"range","marks":[],"text":"我们故意将这两个类中的所有成员都删除了，目的是让你必须去查阅手册找到这两个结构中到底有什么。你可以轻松的在"}]},{"kind":"inline","type":"link","key":"cb9c641f5b9f4d3d8d36d1631ab62d00","isVoid":false,"data":{"href":"https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4"},"nodes":[{"kind":"text","key":"d6755e9c528f4b4485fc684c7f1edf3c","ranges":[{"kind":"range","marks":[],"text":"4.4节"}]}]},{"kind":"text","key":"bcdc7cde60fe40eea09131844b04a357","ranges":[{"kind":"range","marks":[],"text":"找到答案。具体的实现我们留出了其他的Info的具体实现，可以对照其中的内容进行实现。"},{"kind":"range","marks":[{"kind":"mark","data":{},"type":"bold"}],"text":"这些类仅仅是留给你作为参考的，不需要修改任何代码，不用被吓到~ "}]}]},{"kind":"block","type":"paragraph","key":"f7d6a47af50748bcb55c77855e94c162","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"cd10da2053954691a149a04fb5315d51","ranges":[{"kind":"range","marks":[],"text":"在UTF8Info的实现中较为困难的一点是，string的长度并不是固定不变的，因此对于getConstantPoolInfo方法中的bytesRead变量来说是无法直接增加一个默认值的。你可以有很多种方法来提供这个信息。"}]}]},{"kind":"block","type":"heading-3","key":"c6b158ba29e342e1b76ea99acb98b4e7","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"7c5c5e17807a4f319355667e9778c574","ranges":[{"kind":"range","marks":[],"text":"完成要求3："}]}]},{"kind":"block","type":"paragraph","key":"03128d4f939240b290bc565bfd444d79","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"6ece0d86c72143deb9efd1636ba50a28","ranges":[{"kind":"range","marks":[],"text":"到这里我们进入了完成JClass的阶段，Field与Method十分类似，参考Method的实现你就可以轻松的完成Field的实现。这个要求只是希望你可以熟悉一下Method和Field中具体有哪些内容。"}]}]},{"kind":"block","type":"heading-3","key":"fbd49703124248e6921d7786408a83cd","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"158272688d2f414abda84a5532ecb877","ranges":[{"kind":"range","marks":[],"text":"完成要求4："}]}]},{"kind":"block","type":"paragraph","key":"2f410e45a431460897b5ec64fb97fbb5","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"f50e4a38100e4978b2984590bfd4643d","ranges":[{"kind":"range","marks":[],"text":"首先要完成这部分的内容你需要阅读手册"}]},{"kind":"inline","type":"link","key":"d2666224cbd64b9ab59795e7de8d6a76","isVoid":false,"data":{"href":"https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.3"},"nodes":[{"kind":"text","key":"81c1550b69204eb59be020ac5f0b50a5","ranges":[{"kind":"range","marks":[],"text":"4.3.3"}]}]},{"kind":"text","key":"88c3bd9ed4a547e099c02b440c82e140","ranges":[{"kind":"range","marks":[],"text":"部分，规范中规定了方法的描述符具有如"},{"kind":"range","marks":[{"kind":"mark","data":{},"type":"code"}],"text":"({ParameterDescriptor} ) ReturnDescriptor"},{"kind":"range","marks":[],"text":" 的形式，我们对官方给出的例子稍加修改"}]}]},{"kind":"block","type":"code","key":"0ff356ed78c643c3b0fdc6bc22aa42bd","isVoid":false,"data":{"syntax":"text"},"nodes":[{"kind":"block","type":"code-line","key":"a4776561bab845d6a9498ea4a26beaad","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"251445eb3d7d48a0bd9c6f5e2804a8f1","ranges":[{"kind":"range","marks":[],"text":"Object m(int[] i, double d, Thread t) {...}"}]}]},{"kind":"block","type":"code-line","key":"2eec36643ea647be9b8c032259b0e5da","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"22d5d5ba8d3749d7a332f903cf5f5a44","ranges":[{"kind":"range","marks":[],"text":""}]}]},{"kind":"block","type":"code-line","key":"88a88fd1e06e4011ac12f2e4da59e5f0","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"d043e721348e4521bf5aeb036c5db2cb","ranges":[{"kind":"range","marks":[],"text":"([IDLjava/lang/Thread;)Ljava/lang/Object;"}]}]}]},{"kind":"block","type":"paragraph","key":"5223527156864b1b806d83dfd7c08587","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"d72ec4d88c6f4f1bb6617c71c7043d09","ranges":[{"kind":"range","marks":[],"text":"方法m的返回值是Object类，它接收三个参数，参数的类型分别为int[]、double、Thread类。在JVM中有一些基本的类型，分别为BCDFIJSZ，以及数组类型[，其余的则是以L开头以分号结尾的类类型。在描述符中，会按照源码中的顺序排列对应的简写表达，例如[I对应int[]，D对应double，Ljava/lang/Thread;对应Thread类。"}]}]},{"kind":"block","type":"paragraph","key":"d34bec50c90644b78c8fe03f73ea2452","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"8ccda4d8ecaa43a5a75e1ce2dbea0821","ranges":[{"kind":"range","marks":[],"text":"要进行argc计算，argc在这里的含义代表着方法中的参数占据的空间，除了J(long)和D(double)占据两个空间，其余都占据一个空间。如果要对上面这个进行argc的计算，"},{"kind":"range","marks":[{"kind":"mark","data":{},"type":"bold"}],"text":"你将会得到的结果是4，而不是3。"},{"kind":"range","marks":[],"text":"在你的代码实现中也需要注意这一点。"}]}]},{"kind":"block","type":"paragraph","key":"c6a720cc08a44295b00d730671dcb62a","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"e98681adf368454281b93aeb2eae0782","ranges":[{"kind":"range","marks":[{"kind":"mark","data":{},"type":"bold"}],"text":"除此之外，你需要注意数组的表达含义"},{"kind":"range","marks":[],"text":"，数组符号[本身不能够被计算进argc中，因为数组符号必须和一个非数组符号结合才有实际的意义，这个非数组符号必须出现在1或多个数组符号的右边。即使是[[[[[[[Ljava/lang/String;这样的表示，它也只能够被当成一个多维的String数组，被计算成1。并且在数组的表示中它不会被中断，从遇到第一个数组符号[开始到遇到一个非数组符号结束，这中间绝对不会有非数组符号出现，否则就会被认为是两个/多个数组。"}]}]},{"kind":"block","type":"hint","key":"1e7ed3447fe14e3aaed8a781460067ad","isVoid":false,"data":{"style":"info"},"nodes":[{"kind":"block","type":"paragraph","key":"ddf0dd8678f24df38f2d95a1232db70d","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"ae46ad83bab9428fb12bc963b76133d6","ranges":[{"kind":"range","marks":[],"text":"在实现方法时如果出现多个if-else，请将它转换成switch或者表驱动(表驱动这里没必要)。主要的理由是多个if-else不仅在可读性上有很大的问题，并且会带来一定的性能影响。在后续的实验中，你会理解这两者在字节码层次上的区别。"}]}]}]},{"kind":"block","type":"heading-1","key":"018e5c72828e4d12a41e62a037988322","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"3aa6841295e34c0ca33e765a91173b1c","ranges":[{"kind":"range","marks":[],"text":"3. 手册简介（来自xxz助教）"}]}]},{"kind":"block","type":"paragraph","key":"ac5573bce40f4d8c914d6f5e4faa51f7","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"14805832f3ed4627af6d132edc233598","ranges":[{"kind":"range","marks":[],"text":"对于本实验有帮助的部分集中在手册的 4.1-4.7 节，其它内容有兴趣的同学可以自行阅读探索。"}]}]},{"kind":"block","type":"paragraph","key":"78a6145a63db431480c83e4bbb3a2726","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"adfbbf067edc45fb91d01697bc20a260","ranges":[{"kind":"range","marks":[],"text":"4.1 是对 classfile 整体结构的简介和说明 4.2 可以跳过 4.3 是对“类型描述符”组织形式的说明，其中 4.3.2 用到的表示方式是“上下文无关文法(Context Free Grammar)”, 有兴趣的同学可以自行进一步了解（欢迎选修“计算理论初步”）。"}]}]},{"kind":"block","type":"paragraph","key":"b26c4fda9d8340d68ce2968c58591f22","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"e41dc349c04043feb30e3f56c6cac725","ranges":[{"kind":"range","marks":[],"text":"在这里简单介绍一下它描述的意思： Descriptor 可以是 BaseType, ObjectType, ArrayType 的一种， 如果是 BaseType，它一定是 BCDFIJSZ 中的一个字母； 如果是 ObjectType，它是"},{"kind":"range","marks":[{"kind":"mark","data":{},"type":"code"}],"text":"L\u003c类名\u003e;"},{"kind":"range","marks":[],"text":" ; 如果是 ArrayType，它是"},{"kind":"range","marks":[{"kind":"mark","data":{},"type":"code"}],"text":"[\u003c成员描述符\u003e"},{"kind":"range","marks":[],"text":"，其中成员描述符又是一个 Descriptor，可以是 BaseType, ObjectType, ArrayType 的一种……"}]}]},{"kind":"block","type":"paragraph","key":"a9fbb3b9fe8749b0b03c41f92751873b","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"95b63abab0584f2ab84aec21a0a85f8a","ranges":[{"kind":"range","marks":[],"text":"例如，二维"},{"kind":"range","marks":[{"kind":"mark","data":{},"type":"code"}],"text":"int"},{"kind":"range","marks":[],"text":"数组可以这样表示： 首先它是一个数组，数组的成员是一维"},{"kind":"range","marks":[{"kind":"mark","data":{},"type":"code"}],"text":"int"},{"kind":"range","marks":[],"text":"数组， 所以描述符是"},{"kind":"range","marks":[{"kind":"mark","data":{},"type":"code"}],"text":"[\u003c一维int数组描述符\u003e"},{"kind":"range","marks":[],"text":"； 而一维"},{"kind":"range","marks":[{"kind":"mark","data":{},"type":"code"}],"text":"int"},{"kind":"range","marks":[],"text":"数组也是一个数组，它的成员是"},{"kind":"range","marks":[{"kind":"mark","data":{},"type":"code"}],"text":"int"},{"kind":"range","marks":[],"text":", 所以可以将上述描述符展开成"},{"kind":"range","marks":[{"kind":"mark","data":{},"type":"code"}],"text":"[[\u003cint描述符\u003e"},{"kind":"range","marks":[],"text":"； 而"},{"kind":"range","marks":[{"kind":"mark","data":{},"type":"code"}],"text":"int"},{"kind":"range","marks":[],"text":"是一个基本类型，它的描述符是 BaseType 中的 I， 所以展开为"},{"kind":"range","marks":[{"kind":"mark","data":{},"type":"code"}],"text":"[[I"},{"kind":"range","marks":[],"text":"，至此，没有再能展开的描述符了， 于是得到二维"},{"kind":"range","marks":[{"kind":"mark","data":{},"type":"code"}],"text":"int"},{"kind":"range","marks":[],"text":"数组描述符为"},{"kind":"range","marks":[{"kind":"mark","data":{},"type":"code"}],"text":"[[I"},{"kind":"range","marks":[],"text":"。"}]}]},{"kind":"block","type":"paragraph","key":"81011e4bc82040c98f29dad6158fd7fc","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"c6c370145ddd44b99f8bf878df58f19c","ranges":[{"kind":"range","marks":[],"text":"试着自行解读 4.3.3 中对方法描述符的表示，并试图写出下面这个方法的描述符"}]}]},{"kind":"block","type":"paragraph","key":"7c12eb5ae6374f798cc7c623a9ded022","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"29335cb282674052ad432510692fefaf","ranges":[{"kind":"range","marks":[{"kind":"mark","data":{},"type":"code"}],"text":"int[] foo(int i, Integer i2, Object o);"}]}]},{"kind":"block","type":"paragraph","key":"db443d70e002451181e11de0569cf9a1","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"be18548b418344b9aac4ac689415f876","ranges":[{"kind":"range","marks":[],"text":"4.4 是对常量池信息的描述，特别需要提醒的是 4.4.7 Utf8_info 中，有对 "},{"kind":"range","marks":[{"kind":"mark","data":{},"type":"code"}],"text":"modified UTF-8"},{"kind":"range","marks":[],"text":"格式的描述，感兴趣的同学可以自行查阅文字编码相关的更多资料，在实现中直接使用"},{"kind":"range","marks":[{"kind":"mark","data":{},"type":"code"}],"text":"String"},{"kind":"range","marks":[],"text":"的构造器"},{"kind":"range","marks":[{"kind":"mark","data":{},"type":"code"}],"text":"String(byte[])"},{"kind":"range","marks":[],"text":"即可把对应的"},{"kind":"range","marks":[{"kind":"mark","data":{},"type":"code"}],"text":"modified UTF-8"},{"kind":"range","marks":[],"text":"序列变成 Java 字符串。"}]}]},{"kind":"block","type":"paragraph","key":"954f29857e6340f9a7a28a4d0815c375","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"63894daf553d42d7b7199da6f092ac5f","ranges":[{"kind":"range","marks":[],"text":"4.5-4.6 内容较为简单，大家如果有问题可以相互讨论或在群里提问( ´▽` )ﾉ"}]}]},{"kind":"block","type":"paragraph","key":"84a6ffcfe2354c78a60b8a4a346ebf06","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"2ca4111621fb4764b87c75ada34d1dd3","ranges":[{"kind":"range","marks":[],"text":"4.7 中有对 attribtue 的详细解读，在后续的实验中会有更进一步的讲解"}]}]},{"kind":"block","type":"blockquote","key":"51c5b53f029443f7bccccd41dec69232","isVoid":false,"data":{},"nodes":[{"kind":"block","type":"paragraph","key":"c197592367e24f0eb7cbf0f1501f34ee","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"5b1cbc5d946d4e029ebf59950abed3af","ranges":[{"kind":"range","marks":[],"text":"上面的指南是我能想到的一些可能会让新手比较困惑的地方，但是即使有了这个指南，读手册依然是一件很有难度的事情。实际上，在理解了手册内容之后，本实验的难度并不高。训练大家阅读手册的能力是这个实验最重要的目的之一。"}]}]},{"kind":"block","type":"paragraph","key":"c7201e2089434f6ab1b9e5018f176c1c","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"5c4b57b9e6404f218e4dbb2f1f65a232","ranges":[{"kind":"range","marks":[],"text":"手册上是对 JVM 严谨的描述，所以有些内容其实可读性不是那么好，甚至需要来回读几次才能理解。这个过程需要花费时间，但是是有价值的。"}]}]},{"kind":"block","type":"paragraph","key":"2eea89a8055940058ba85a747e74c0a4","isVoid":false,"data":{},"nodes":[{"kind":"text","key":"f04f7b6d5a024f70b28d41e8929a5669","ranges":[{"kind":"range","marks":[],"text":"最后，大家不要害怕，如果读手册的过程中遇到任何问题，可以在群里求助同学和助教们，希望大家玩儿得开心！"}]}]}]}]}}}},"user":{"kind":"user","uid":"-M7hQCEw3cwK-Z9fKS8A","baseDomain":"","defaultSpace":null,"displayName":"","photoURL":null,"deletedAt":null,"usageStatuses":null,"email":"","emailVerified":false,"disabled":false,"phoneNumber":null,"providers":{},"isVisitor":true,"customClaims":{},"lastLoggedInAt":1589898854117,"createdAt":1589898854117}},"config":{"environment":"production","firebase":{"databaseURL":"https://gitbook-28427.firebaseio.com","apiKey":"AIzaSyBL3yy07hdwBstwhhFTkRtzJA865UQzQVg","authDomain":"app.gitbook.com","projectId":"gitbook-28427","storageBucket":"gitbook-28427.appspot.com","messagingSenderId":"208404988308"},"amplitude":{"key":"fef1e872c952688acd962d30aa545b9e","endpoint":"www.gitbook.com/__amp/"},"intercom":{"app_id":"ajrah9dt"},"ga":{"spaces":{"id":"UA-57505611-10","view_id":"152688311"},"website":{"id":"UA-57505611-9"}},"slack":{"client_id":"3085992729.251477828931","redirect_uri":"https://hooks.gitbook.com/hooks/slack/oauth"},"sentry":{"url":"https://df403e1abd7046148b272790ec350ce0@sentry.io/193897"},"stripe":{"public_key":"pk_live_iPkbPsG28bjTrkbfHXUq0cA0","plans":{"startup_monthly":"plan_FpdWuSK3BgOldB","startup_yearly":"plan_FpdZWR4TLYnKYH","team_monthly":"plan_GAeDpGXRUSctoE","team_yearly":"plan_GAeDEVtig2ujYe","business_monthly":"plan_ERCJFVRMVGgjVZ","business_yearly":"plan_ERCJgSzm3Ui1ox"},"products":{"startup":"prod_Cd5mCUdVDfZSHY","business":"prod_DpiRtaS8dvrtrK","enterprise":"prod_DpMsO7RlzNd0Ty","legacy":"prod_FROhqd8l1W4Fwg","team":"prod_GAeD47cc905FaD"}},"algolia":{"appid":"Q9UGR6532T"},"clearbit":{"public_key":"pk_e1e4d94ae5385255f0fc7d76d4897ade"},"urls":{"api":"https://api-beta.gitbook.com","spaces":"https://gitbook-28427.firebaseapp.com","website":"https://app.gitbook.com","saml":"https://www.gitbook.com"},"domains":{"spaces":"gitbook.io","cookie":".gitbook.com"},"cdn":{"blobsurl":"https://gblobscdn.gitbook.com/","hosting_cname":"hosting.gitbook.com"},"statuspage":{"domain":"http://status.gitbook.com"},"logrocket":{"key":"fvjtqz/gitbook"},"version":"6.17.8","buildVersion":"6.17.8-97f7055.30839"},"props":{"ownerID":"5a6c28e0462964002fe39740","spaceID":"-M7HTVnrQXURnsIjLi0Q","spaceName":"jvm","basename":"","location":"/mooc-minilab/class-file-parser","platformStatus":null}};
+            </script>
+            <script id="__LOADABLE_REQUIRED_CHUNKS__" type="application/json" crossorigin="anonymous" charset="utf-8">[]</script>
+<script async data-chunk="space" src="https://gstatic.gitbook.com/js/111.9ba0ec29.js" crossorigin="anonymous" charset="utf-8"></script>
+        </body>
+    </html>
+    
